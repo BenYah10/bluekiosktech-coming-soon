@@ -3,26 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="privacy.title">Politique de confidentialité</title>
 
-  <!-- Reprend ton CSS principal pour garder le même style -->
-  <link rel="stylesheet" href="coming-soon.css" />
-  <link rel="canonical" href="https://www.bluekiosktech.ca/privacy.html">
+  <!-- Titre + i18n (ton script mettra à jour le <title> si besoin) -->
+  <title data-i18n="privacy.title">Politique de confidentialité — BlueKioskTech.ca</title>
 
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.bluekiosktech.ca/privacy.html" />
 
-  <!-- SEO de base -->
+  <!-- CSS -->
+  <link rel="stylesheet" href="/coming-soon.css" />
+
+  <!-- Favicon (PNG unique) -->
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link rel="apple-touch-icon" href="/images/favicon.png" />
+
+  <!-- SEO -->
   <meta name="robots" content="index,follow" />
   <meta name="description" data-i18n="privacy.meta.desc"
         content="Politique de confidentialité BlueKioskTech.ca : données collectées, usage, conservation, droits RGPD/LPRPDE et contact." />
+  <meta name="theme-color" content="#0b1020" />
 
   <!-- Open Graph -->
+  <meta property="og:site_name" content="BlueKioskTech.ca" />
   <meta property="og:title" content="Politique de confidentialité — BlueKioskTech.ca" />
   <meta property="og:description" content="Comment nous collectons, utilisons et protégeons vos données." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://www.bluekiosktech.ca/privacy.html" />
   <meta property="og:image" content="https://www.bluekiosktech.ca/images/og.jpg" />
-  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="fr_CA" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Politique de confidentialité — BlueKioskTech.ca" />
+  <meta name="twitter:description" content="Comment nous collectons, utilisons et protégeons vos données." />
+  <meta name="twitter:image" content="https://www.bluekiosktech.ca/images/og.jpg" />
+
+  <!-- Schema.org (facultatif, utile) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Politique de confidentialité",
+    "url": "https://www.bluekiosktech.ca/privacy.html",
+    "dateModified": "2025-09-05",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "BlueKioskTech.ca",
+      "url": "https://www.bluekiosktech.ca"
+    }
+  }
+  </script>
 </head>
+
 <body lass="policy-page">
   
   <!-- Header (même structure/classe que la home) -->
@@ -164,5 +198,6 @@
   <script src="privacy.js" defer></script>
 </body>
 </html>
+
 
 
