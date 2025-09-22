@@ -412,5 +412,31 @@ body{
   align-items: center;
   gap: 8px;
 }
+/* === Empiler Facebook sous Instagram dans le header (sans modifier le HTML) === */
+
+/* 1) Autoriser le retour à la ligne dans le conteneur du header */
+.site-header .wrap{
+  flex-wrap: wrap;            /* indispensable pour pouvoir passer à la ligne */
+}
+
+/* 2) Ordonner les éléments et forcer FB sur la ligne suivante */
+.site-header .brand{ order: 0; }   /* ton logo (si l'élément a cette classe) */
+.site-header .ig{ order: 1; }      /* Instagram en premier, à droite du logo */
+.site-header .fb{
+  order: 2;                  /* Facebook après Instagram… */
+  flex-basis: 100%;          /* …et prend toute la ligne suivante = passe dessous */
+  margin-top: 6px;
+  text-align: center;        /* mets 'right' si tu le veux collé à droite */
+}
+
+/* 3) Conserver l’alignement icône + texte sur une même ligne */
+.site-header .ig,
+.site-header .fb{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 
 
