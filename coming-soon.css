@@ -363,33 +363,51 @@ body{
 
 /* Colonne Instagram + Facebook à droite du header */
 /* === Header socials: IG au-dessus de FB (version wrapper propre) === */
+/* === Header socials: stack IG/FB, mais icône + texte sur une seule ligne === */
+
+/* Le conteneur qui empile IG au-dessus de FB */
 .site-header .socials{
-  display:flex;
-  flex-direction:column;
-  align-items:center;  /* mets 'flex-end' si tu les veux collés au bord droit */
-  gap:6px;
+  display: flex;
+  flex-direction: column;   /* IG puis FB */
+  align-items: flex-end;     /* colle la colonne à droite (mets center si tu préfères) */
+  gap: 6px;
 }
 
+/* Chaque lien = une ligne : [icone][label] */
 .site-header .socials a{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:var(--muted);
-  text-decoration:none;
+  display: flex;             /* force l'icone et le label sur la MÊME ligne */
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;       /* empêche le retour à la ligne entre l'icône et le texte */
+  color: var(--muted);
+  text-decoration: none;
 }
-.site-header .socials a:hover{ color:var(--text); }
+.site-header .socials a:hover{ color: var(--text); }
 
+/* Taille des icônes */
 .site-header .socials .ig-icon,
 .site-header .socials .fb-icon{
-  width:18px;
-  height:18px;
-  display:block;
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex: 0 0 auto;            /* l'icône ne se compresse pas */
 }
 
-/* Mobile: côte à côte si tu préfères */
-@media (max-width:560px){
-  .site-header .socials{ flex-direction:row; gap:14px; }
+/* 🧹 Nettoyage des anciennes règles qui perturbaient l'alignement */
+.site-header .ig + .fb{ display: initial; }      /* annule un éventuel display:block d'un test précédent */
+.site-header .fb{
+  flex-basis: auto;
+  text-align: inherit;
+  order: unset;
+  margin-top: 0;
 }
+
+/* (Option) sur mobile, les mettre côte à côte */
+@media (max-width: 560px){
+  .site-header .socials{ flex-direction: row; gap: 12px; }
+}
+
 
 
 
