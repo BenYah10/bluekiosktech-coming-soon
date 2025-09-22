@@ -172,21 +172,28 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <p data-i18n="footer.copy">© <span id="year"></span> BlueKiosk.tech — Tous droits réservés.</p>
-      <nav class="foot-links">
-        <a href="mailto:admin@bluekiosk.tech">admin@bluekiosk.tech</a>
-        <a href="privacy.html" data-i18n="footer.privacy">Politique de confidentialité</a>
-      </nav>
-    </div>
-  </footer>
+ <footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>BlueKiosk.tech</h3>
+        <p data-i18n="footer.tagline">Révolutionnons l'hygiène sportive ensemble.</p>
+      </div>
 
-  <!-- EmailJS (optionnel : remplace les IDs dans coming-soon.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script src="coming-soon.js" defer></script>
-</body>
-</html>
+      <div class="footer-section">
+        <h3 data-i18n="footer.contact.title">Contact</h3>
+        <p><a href="mailto:admin@bluekiosk.tech">admin@bluekiosk.tech</a></p>
+        <!-- Garde le nom du fichier qui existe réellement chez toi (privacy.html ou privacy-policy.html) -->
+        <p><a href="privacy.html" target="_blank" rel="noopener" data-i18n="footer.privacy">Politique de confidentialité</a></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">© <span id="year"></span> BlueKiosk.tech — Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
 
 
 
