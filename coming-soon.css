@@ -378,10 +378,9 @@ body{
   flex: 0 0 auto;
 }
 
-/* Mobile : les mettre côte à côte (optionnel) */
-@media (max-width:560px){
-  .site-header .socials{
-    flex-direction: row;
-    gap: 12px;
-  }
+/* 🔒 Override en mobile (au cas où une ancienne règle passe en "row") */
+@media (max-width: 9999px){
+  .site-header .socials{ flex-direction: column !important; align-items: flex-end !important; }
+
 }
+
