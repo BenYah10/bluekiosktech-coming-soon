@@ -366,48 +366,47 @@ body{
 /* === Header socials: stack IG/FB, mais icône + texte sur une seule ligne === */
 
 /* Le conteneur qui empile IG au-dessus de FB */
+/* === Header socials: icône + texte sur UNE ligne (IG et FB) === */
 .site-header .socials{
   display: flex;
-  flex-direction: column;   /* IG puis FB */
-  align-items: flex-end;     /* colle la colonne à droite (mets center si tu préfères) */
+  flex-direction: column;     /* IG au-dessus de FB */
+  align-items: flex-end;      /* colle à droite (mets 'center' si tu préfères) */
   gap: 6px;
 }
 
-/* Chaque lien = une ligne : [icone][label] */
 .site-header .socials a{
-  display: flex;             /* force l'icone et le label sur la MÊME ligne */
+  display: flex;              /* icône + label sur la même ligne */
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;       /* empêche le retour à la ligne entre l'icône et le texte */
+  white-space: nowrap;        /* évite le retour à la ligne entre icône et texte */
   color: var(--muted);
   text-decoration: none;
 }
 .site-header .socials a:hover{ color: var(--text); }
 
-/* Taille des icônes */
+/* taille & comportement des icônes */
 .site-header .socials .ig-icon,
 .site-header .socials .fb-icon{
   width: 18px;
   height: 18px;
   display: block;
-  flex: 0 0 auto;            /* l'icône ne se compresse pas */
+  flex: 0 0 auto;
 }
 
-/* 🧹 Nettoyage des anciennes règles qui perturbaient l'alignement */
-.site-header .ig + .fb{ display: initial; }      /* annule un éventuel display:block d'un test précédent */
+/* 🧹 annule d’anciens tests qui cassent l’alignement */
+.site-header .ig + .fb{ display: initial; }
 .site-header .fb{
   flex-basis: auto;
-  text-align: inherit;
-  order: unset;
   margin-top: 0;
+  text-align: inherit;
+  order: initial;
 }
 
-/* (Option) sur mobile, les mettre côte à côte */
-@media (max-width: 560px){
+/* (option) sur mobile mettre IG/FB côte à côte */
+@media (max-width:560px){
   .site-header .socials{ flex-direction: row; gap: 12px; }
 }
-
 
 
 
