@@ -348,44 +348,28 @@ body{
 /* Option : petit atténuateur de texte (au cas où var(--muted) n’est pas défini) */
 .site-footer .muted{ color: var(--muted, #94a3b8); }
 
-/* Place le lien Facebook sous Instagram dans le header */
-.site-header .ig + .fb{
-  display: block;       /* passe à la ligne */
-  margin-top: 6px;      /* petit espace entre les deux */
-}
+/* ==== Header socials (version propre et finale) ==== */
 
-.site-header .ig, 
-.site-header .fb{
-  display: inline-flex; /* garde l'icône + texte alignés */
-  align-items: center;
-  gap: 8px;
-}
-
-/* Colonne Instagram + Facebook à droite du header */
-/* === Header socials: IG au-dessus de FB (version wrapper propre) === */
-/* === Header socials: stack IG/FB, mais icône + texte sur une seule ligne === */
-
-/* Le conteneur qui empile IG au-dessus de FB */
-/* === Header socials: icône + texte sur UNE ligne (IG et FB) === */
+/* Colonne des liens : IG au-dessus de FB */
 .site-header .socials{
   display: flex;
-  flex-direction: column;     /* IG au-dessus de FB */
-  align-items: flex-end;      /* colle à droite (mets 'center' si tu préfères) */
+  flex-direction: column;   /* empile IG puis FB */
+  align-items: flex-end;    /* colle la colonne à droite (mets center si tu préfères) */
   gap: 6px;
 }
 
+/* Chaque lien = [icone][label] sur une seule ligne */
 .site-header .socials a{
-  display: flex;              /* icône + label sur la même ligne */
-  flex-direction: row;
+  display: flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;        /* évite le retour à la ligne entre icône et texte */
+  white-space: nowrap;      /* évite le retour à la ligne entre l’icône et le texte */
   color: var(--muted);
   text-decoration: none;
 }
 .site-header .socials a:hover{ color: var(--text); }
 
-/* taille & comportement des icônes */
+/* Taille des icônes */
 .site-header .socials .ig-icon,
 .site-header .socials .fb-icon{
   width: 18px;
@@ -394,21 +378,10 @@ body{
   flex: 0 0 auto;
 }
 
-/* 🧹 annule d’anciens tests qui cassent l’alignement */
-.site-header .ig + .fb{ display: initial; }
-.site-header .fb{
-  flex-basis: auto;
-  margin-top: 0;
-  text-align: inherit;
-  order: initial;
-}
-
-/* (option) sur mobile mettre IG/FB côte à côte */
+/* Mobile : les mettre côte à côte (optionnel) */
 @media (max-width:560px){
-  .site-header .socials{ flex-direction: row; gap: 12px; }
+  .site-header .socials{
+    flex-direction: row;
+    gap: 12px;
+  }
 }
-
-
-
-
-
