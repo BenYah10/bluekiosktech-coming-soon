@@ -123,15 +123,15 @@ body{
 }
 
 /* --- Icône Instagram dans le header --- */
-.ig{
+.ig, .fb{
   display:inline-flex;
   align-items:center;
   gap:8px;
   color:var(--muted);
   text-decoration:none;
 }
-.ig:hover{ color:var(--text); }
-.ig .ig-icon{
+.ig:hover, .fb:hover{ color: var(--text); }
+.ig .ig-icon, .fb .fb-icon{
   width:18px;
   height:18px;
   display:block;
@@ -347,4 +347,5 @@ body{
 
 /* Option : petit atténuateur de texte (au cas où var(--muted) n’est pas défini) */
 .site-footer .muted{ color: var(--muted, #94a3b8); }
+
 
