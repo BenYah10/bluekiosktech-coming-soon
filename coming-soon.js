@@ -126,6 +126,18 @@ document.addEventListener("DOMContentLoaded", ()=>{
     TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"
   };
 
+  // Sécurise le switch avec une délégation de clics
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (!t) return;
+
+  const frBtn = t.id === 'lang-fr' ? t : t.closest?.('#lang-fr');
+  const enBtn = t.id === 'lang-en' ? t : t.closest?.('#lang-en');
+
+  if (frBtn) { e.preventDefault?.(); applyI18n('fr'); }
+  if (enBtn) { e.preventDefault?.(); applyI18n('en'); }
+});
+
   const form = document.getElementById("waitlist");
   const out = document.getElementById("wl-done");
 
@@ -161,3 +173,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
   }
 });
+
