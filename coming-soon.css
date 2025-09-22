@@ -348,4 +348,16 @@ body{
 /* Option : petit atténuateur de texte (au cas où var(--muted) n’est pas défini) */
 .site-footer .muted{ color: var(--muted, #94a3b8); }
 
+/* Place le lien Facebook sous Instagram dans le header */
+.site-header .ig + .fb{
+  display: block;       /* passe à la ligne */
+  margin-top: 6px;      /* petit espace entre les deux */
+}
+
+.site-header .ig, 
+.site-header .fb{
+  display: inline-flex; /* garde l'icône + texte alignés */
+  align-items: center;
+  gap: 8px;
+}
 
