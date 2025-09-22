@@ -361,3 +361,33 @@ body{
   gap: 8px;
 }
 
+/* Colonne Instagram + Facebook à droite du header */
+.site-header .socials{
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* mets "flex-end" si tu veux les coller au bord droit */
+  gap: 6px;
+}
+
+.site-header .socials a{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.site-header .socials a:hover{ color: var(--text); }
+
+.site-header .socials .ig-icon,
+.site-header .socials .fb-icon{
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Mobile : si tu préfères les mettre côte à côte en petit écran */
+@media (max-width: 560px){
+  .site-header .socials{ flex-direction: row; gap: 14px; }
+}
+
+
