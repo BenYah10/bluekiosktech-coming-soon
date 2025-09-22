@@ -390,4 +390,27 @@ body{
   .site-header .socials{ flex-direction: row; gap: 14px; }
 }
 
+/* === Header : mettre Facebook sous Instagram, sans changer le HTML === */
+
+/* autorise le retour à la ligne des éléments du header */
+.site-header .wrap{
+  /* .wrap est déjà en display:flex dans ton header — on ajoute : */
+  flex-wrap: wrap;
+}
+
+/* force le lien Facebook à passer à la ligne suivante, sous Instagram */
+.site-header .fb{
+  flex-basis: 100%;     /* occupe toute la ligne suivante */
+  margin-top: 6px;      /* petit espace entre IG et FB */
+  text-align: center;   /* center; mets 'right' si tu préfères aligné à droite */
+}
+
+/* garde l’icône + texte bien alignés sur une même ligne */
+.site-header .ig,
+.site-header .fb{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 
