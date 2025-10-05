@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Titre + i18n (ton script mettra à jour le <title> si besoin) -->
+  <!-- Titre + i18n (ton script peut mettre à jour le <title> si besoin) -->
   <title data-i18n="privacy.title">Politique de confidentialité — BlueKioskTech.ca</title>
 
   <!-- Canonical -->
   <link rel="canonical" href="https://www.bluekiosktech.ca/privacy.html" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/coming-soon.css" />
+  <link rel="stylesheet" href="./coming-soon.css" />
 
-  <!-- Favicon (PNG unique) -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/images/favicon-B.png" />
   <link rel="apple-touch-icon" href="/images/favicon-B.png" />
 
@@ -40,7 +40,7 @@
   <meta name="twitter:description" content="Comment nous collectons, utilisons et protégeons vos données." />
   <meta name="twitter:image" content="https://www.bluekiosktech.ca/images/og.jpg" />
 
-  <!-- Schema.org (facultatif, utile) -->
+  <!-- Schema.org (facultatif) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -57,9 +57,8 @@
   </script>
 </head>
 
-<body lass="policy-page">
-  
-  <!-- Header (même structure/classe que la home) -->
+<body class="policy-page">
+  <!-- Header -->
   <header class="site-header">
     <div class="wrap">
       <a href="/" class="brand" aria-label="Accueil BlueKioskTech.ca">
@@ -67,16 +66,15 @@
       </a>
 
       <a class="ig" href="https://www.instagram.com/bluekiosktech" target="_blank" rel="noopener">
-        <span class="ig.icon" aria-hidden="true">📷</span> Instagram
+        <span class="ig-icon" aria-hidden="true">📷</span> Instagram
       </a>
     </div>
 
-    <!-- Lang switch (flottant, même style que la home) -->
+    <!-- Lang switch -->
     <div class="lang-switch" aria-label="Language switch">
-     <button id="lang-fr" class="is-active" aria-pressed="true">FR</button>
-     <button id="lang-en" aria-pressed="false">EN</button>
+      <button id="lang-fr" class="is-active" aria-pressed="true">FR</button>
+      <button id="lang-en" aria-pressed="false">EN</button>
     </div>
-
   </header>
 
   <!-- Contenu -->
@@ -133,15 +131,9 @@
     <section class="card" style="margin-top:16px">
       <h2 data-i18n="privacy.share.title">5. Sous-traitants & hébergement</h2>
       <ul>
-        <li data-i18n-html="privacy.share.li1">
-          <strong>Hébergement :</strong> Vercel (logs d’accès techniques standard).
-        </li>
-        <li data-i18n-html="privacy.share.li2">
-          <strong>Envoi d’e-mails :</strong> EmailJS (uniquement si vous nous écrivez via le formulaire).
-        </li>
-        <li data-i18n-html="privacy.share.li3">
-          <strong>Stockage :</strong> Google Workspace/Sheets (données de formulaire/feedback).
-        </li>
+        <li data-i18n-html="privacy.share.li1"><strong>Hébergement :</strong> Vercel (logs d’accès techniques standard).</li>
+        <li data-i18n-html="privacy.share.li2"><strong>Envoi d’e-mails :</strong> EmailJS (uniquement si vous nous écrivez via le formulaire).</li>
+        <li data-i18n-html="privacy.share.li3"><strong>Stockage :</strong> Google Workspace/Sheets (données de formulaire/feedback).</li>
       </ul>
       <p class="kpi-l" data-i18n="privacy.share.note">
         Ces prestataires traitent les données pour notre compte et selon nos instructions, avec des garanties
@@ -189,17 +181,12 @@
     <div class="wrap" style="justify-content:center">
       <div class="foot-links">
         <a href="/" data-i18n="footer.home">Accueil</a> ·
-        <a href="/privacy.html" data-i18n="footer.privacy">Politique de confidentialité</a>
+        <a href="./privacy.html" data-i18n="footer.privacy">Politique de confidentialité</a>
       </div>
       <div style="opacity:.7">© <span id="y"></span> BlueKioskTech.ca</div>
     </div>
   </footer>
 
-  <script src="privacy.js" defer></script>
+  <script src="./privacy.js" defer></script>
 </body>
 </html>
-
-
-
-
-
