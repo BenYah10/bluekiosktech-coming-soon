@@ -1,9 +1,14 @@
-// privacy.js
+// privacy.js (update)
+// - Langue initiale : URL ?lang => localStorage => navigateur
+// - Applique i18n + met à jour <html lang>, title/meta, boutons
+// - Conserve ?lang= dans l’URL (history.replaceState)
+
 (function () {
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-  const setYear = () => ($("#y").textContent = new Date().getFullYear());
+  const setYear = () => { const y = $("#y"); if (y) y.textContent = new Date().getFullYear(); };
 
+  // --- Dictionnaire i18n ---
   const i18n = {
     fr: {
       "privacy.title": "Politique de confidentialité",
@@ -117,34 +122,66 @@
     }
   };
 
+  function setActiveButtons(lang) {
+    const fr = $("#lang-fr"), en = $("#lang-en");
+    if (fr) { fr.classList.toggle("is-active", lang === "fr"); fr.setAttribute("aria-pressed", lang === "fr"); }
+    if (en) { en.classList.toggle("is-active", lang === "en"); en.setAttribute("aria-pressed", lang === "en"); }
+  }
+
   function applyI18n(lang) {
-    // Texte simple (textContent)
+    // Textes simples
     $$("[data-i18n]").forEach(el => {
       const k = el.getAttribute("data-i18n");
       if (i18n[lang][k]) el.textContent = i18n[lang][k];
     });
-    // Texte riche (innerHTML)
+    // Textes riches
     $$("[data-i18n-html]").forEach(el => {
       const k = el.getAttribute("data-i18n-html");
       if (i18n[lang][k]) el.innerHTML = i18n[lang][k];
     });
+
+    // <html lang>
     document.documentElement.lang = lang;
+
+    // Titre / meta description si présents
+    const titleEl = document.querySelector("title[data-i18n]");
+    if (titleEl) {
+      const k = titleEl.getAttribute("data-i18n");
+      if (i18n[lang][k]) titleEl.textContent = i18n[lang][k] + " — BlueKioskTech.ca";
+    }
+    const metaDesc = document.querySelector('meta[name="description"][data-i18n]');
+    if (metaDesc) {
+      const k = metaDesc.getAttribute("data-i18n");
+      if (i18n[lang][k]) metaDesc.setAttribute("content", i18n[lang][k]);
+    }
+
+    // Sauvegarde + boutons + URL
     localStorage.setItem("lang", lang);
+    setActiveButtons(lang);
+    const url = new URL(location.href);
+    url.searchParams.set("lang", lang);
+    history.replaceState(null, "", url);
   }
 
-  // Langue initiale
-  const initLang =
-    localStorage.getItem("lang") ||
-    (navigator.language || "fr").toLowerCase().startsWith("fr")
-      ? "fr"
-      : "en";
+  function getInitialLang() {
+    const urlLang = new URLSearchParams(location.search).get("lang");
+    if (urlLang === "fr" || urlLang === "en") return urlLang;
 
+    const stored = localStorage.getItem("lang");
+    if (stored === "fr" || stored === "en") return stored;
+
+    const browser = (navigator.language || "en").toLowerCase().startsWith("fr") ? "fr" : "en";
+    return browser;
+  }
+
+  // Init
+  const initLang = getInitialLang();
   applyI18n(initLang);
   setYear();
 
-  // Si tu ajoutes des boutons FR/EN sur cette page, branche-les ici :
-  const btnFR = document.getElementById("lang-fr");
-  const btnEN = document.getElementById("lang-en");
+  // Boutons FR/EN (si présents)
+  const btnFR = $("#lang-fr");
+  const btnEN = $("#lang-en");
   if (btnFR) btnFR.addEventListener("click", () => applyI18n("fr"));
   if (btnEN) btnEN.addEventListener("click", () => applyI18n("en"));
 })();
