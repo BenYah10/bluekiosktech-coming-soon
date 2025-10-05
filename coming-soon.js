@@ -1,5 +1,4 @@
 // ====== i18n ======
-// ====== i18n ======
 const I18N = {
   fr: {
     "meta.title": "BlueKioskTech.ca – Site en construction",
@@ -29,7 +28,13 @@ const I18N = {
     "status.ok": "Merci ! Vous êtes bien inscrit(e).",
     "status.err": "Oups… Une erreur est survenue. Réessayez plus tard.",
 
-    // >>> Ajoutés : bloc feedback <<<
+    // Page success
+    "success.title": "Merci — votre inscription est confirmée.",
+    "success.lead1": "Nous avons bien reçu votre demande pour rejoindre la liste d’attente. Vous recevrez un e-mail dès l’ouverture du déploiement dans votre zone.",
+    "success.lead2": "En attendant, suivez nos mises à jour et invitez votre gym, bureau ou campus à manifester son intérêt.",
+    "success.back": "← Retour à l’accueil",
+
+    // Feedback (si tu l’utilises)
     "feedback.msg": "Votre avis nous est crucial pour finaliser notre prototype.",
     "feedback.cta": "Donner votre avis"
   },
@@ -62,12 +67,17 @@ const I18N = {
     "status.ok": "Thanks! You’re on the list.",
     "status.err": "Oops… Something went wrong. Please try again later.",
 
-    // >>> Added: feedback block <<<
+    // Success page
+    "success.title": "Thanks — your subscription is confirmed.",
+    "success.lead1": "We’ve received your request to join the waitlist. You’ll get an email when deployment opens in your area.",
+    "success.lead2": "Meanwhile, follow our updates and invite your gym, office or campus to express interest.",
+    "success.back": "← Back to home",
+
+    // Feedback (if used)
     "feedback.msg": "Your feedback is crucial to finalize our prototype.",
     "feedback.cta": "Give feedback"
   }
 };
-
 
 let currentLang =
   localStorage.getItem("lang") ||
@@ -75,17 +85,17 @@ let currentLang =
 
 function applyI18n(lang){
   const dict = I18N[lang] || I18N.en;
-  // text nodes
+
+
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k = el.getAttribute("data-i18n");
     if (dict[k] != null) el.innerHTML = dict[k];
   });
-  // placeholders
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
     const k = el.getAttribute("data-i18n-placeholder");
     if (dict[k]) el.setAttribute("placeholder", dict[k]);
   });
-  // <title> + meta/og/twitter
+
   document.title = dict["meta.title"] || document.title;
   const md = document.querySelector('meta[name="description"]');
   if (md && dict["meta.desc"]) md.setAttribute("content", dict["meta.desc"]);
@@ -98,7 +108,6 @@ function applyI18n(lang){
     if (m && dict["og.title"]) m.setAttribute("content", dict["og.title"]);
   });
 
-  // switch state
   document.getElementById("lang-fr")?.classList.toggle("is-active", lang==="fr");
   document.getElementById("lang-en")?.classList.toggle("is-active", lang==="en");
   document.getElementById("lang-fr")?.setAttribute("aria-pressed", String(lang==="fr"));
@@ -106,71 +115,155 @@ function applyI18n(lang){
 
   localStorage.setItem("lang", lang);
   currentLang = lang;
+
+  // si le champ caché existe, on le met à jour aussi
+  const hiddenLang = document.getElementById("waitlist-lang");
+  if (hiddenLang) hiddenLang.value = lang;
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  // lang setup
+  // i18n init + switchers
   applyI18n(currentLang);
-  document.getElementById("lang-fr")?.addEventListener("click", ()=>applyI18n("fr"));
-  document.getElementById("lang-en")?.addEventListener("click", ()=>applyI18n("en"));
+  document.getElementById("lang-fr")?.addEventListener("click", (e)=>{ e.preventDefault(); applyI18n("fr"); });
+  document.getElementById("lang-en")?.addEventListener("click", (e)=>{ e.preventDefault(); applyI18n("en"); });
 
   // year
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 
-  // ===== EmailJS waitlist (facultatif) =====
-  // ➜ remplace par tes IDs EmailJS (ou commente ces 3 lignes pour désactiver)
+  // emailjs (ne servira QUE si on n'utilise pas Netlify)
   const EMAILJS = {
     USER_ID: "YOUR_EMAILJS_PUBLIC_KEY",
     SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",
     TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"
   };
 
-  // Sécurise le switch avec une délégation de clics
-document.addEventListener('click', (e) => {
-  const t = e.target;
-  if (!t) return;
+  // Délégation de clic de sécurité (si le switch est ailleurs dans le DOM)
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (!t) return;
+    const frBtn = t.id === 'lang-fr' ? t : t.closest?.('#lang-fr');
+    const enBtn = t.id === 'lang-en' ? t : t.closest?.('#lang-en');
+    if (frBtn) { e.preventDefault?.(); applyI18n('fr'); }
+    if (enBtn) { e.preventDefault?.(); applyI18n('en'); }
+  });
 
-  const frBtn = t.id === 'lang-fr' ? t : t.closest?.('#lang-fr');
-  const enBtn = t.id === 'lang-en' ? t : t.closest?.('#lang-en');
-
-  if (frBtn) { e.preventDefault?.(); applyI18n('fr'); }
-  if (enBtn) { e.preventDefault?.(); applyI18n('en'); }
-});
-
-  const form = document.getElementById("waitlist");
-  const out = document.getElementById("wl-done");
-
-  if (form){
-    try { emailjs.init(EMAILJS.USER_ID); } catch(e) {}
-
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault();
-      out.textContent = ""; // reset
-
-      const email = (document.getElementById("email")?.value || "").trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-        out.textContent = currentLang==="fr" ? "Email invalide." : "Invalid email.";
-        return;
-      }
-
-      // Si EmailJS non configuré, fallback mailto
-      if (!EMAILJS.USER_ID || !EMAILJS.SERVICE_ID || !EMAILJS.TEMPLATE_ID){
-        window.location.href = `mailto:admin@bluekiosk.tech?subject=Waitlist&body=${encodeURIComponent(email)}`;
-        out.textContent = currentLang==="fr" ? "Merci !" : "Thanks!";
-        form.reset();
-        return;
-      }
-
-      try{
-        await emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, { email });
-        out.textContent = I18N[currentLang]["status.ok"];
-        form.reset();
-      }catch(err){
-        console.error(err);
-        out.textContent = I18N[currentLang]["status.err"];
-      }
-    });
+  // dans coming-soon.js (côté index), après avoir déterminé la langue courante `lang`
+const lp = document.getElementById("link-privacy");
+if (lp) {
+    const u = new URL(lp.getAttribute("href"), window.location.href);
+    u.searchParams.set("lang", currentLang);  // <— utiliser currentLang !
+    lp.setAttribute("href", u.toString());
   }
-});
 
+
+  // ====== WAITLIST FORM ======
+  const form = document.getElementById("waitlist");
+  const out  = document.getElementById("wl-done");
+  const emailInput = document.getElementById("waitlist-email");
+  const isNetlify = !!(form && form.hasAttribute("data-netlify"));
+
+  // champs cachés
+  const hiddenLang = document.getElementById("waitlist-lang");
+  if (hiddenLang) hiddenLang.value = currentLang;
+  const hiddenBiz  = document.getElementById("is-business"); // optionnel (pour Netlify Forms)
+
+  // --- liste de domaines grand public à refuser (adresse pro requise) ---
+  const BLOCKED_DOMAINS = new Set([
+    // Global
+    "gmail.com","googlemail.com","yahoo.com","ymail.com","aol.com",
+    "outlook.com","hotmail.com","live.com","msn.com","icloud.com","me.com",
+    "protonmail.com","pm.me","gmx.com","mail.com",
+    // Disposable / temporaires
+    "yopmail.com","mailinator.com","guerrillamail.com","10minutemail.com",
+    "tempmail.com","discard.email","sharklasers.com",
+    // FR & EU courants
+    "orange.fr","wanadoo.fr","free.fr","sfr.fr","laposte.net","bbox.fr","neuf.fr",
+    "hotmail.fr","outlook.fr","live.fr"
+  ]);
+
+  function isBusinessEmail(email){
+    const m = (email||"").toLowerCase().match(/^[^@\s]+@([^@\s]+)$/);
+    if (!m) return false;
+    const domain = m[1];
+    return !BLOCKED_DOMAINS.has(domain);
+  }
+  function showError(msg){
+    if (out) out.textContent = msg;
+    if (emailInput){
+      emailInput.setAttribute("aria-invalid","true");
+      emailInput.focus();
+    }
+  }
+  function clearError(){
+    if (out) out.textContent = "";
+    if (emailInput) emailInput.removeAttribute("aria-invalid");
+  }
+
+  if (!form) return;
+
+  if (isNetlify) {
+    // Netlify Forms : on valide et on ajoute ?lang=xx, puis on laisse partir
+    form.addEventListener('submit', function (e) {
+      const email = (emailInput?.value || "").trim();
+
+      // format minimal (HTML5 + pattern côté input) + filtre "pro"
+      if (!isBusinessEmail(email)) {
+        e.preventDefault();
+        const msg = currentLang==="fr"
+          ? "Merci d’utiliser une adresse professionnelle (ex. nom@entreprise.com)."
+          : "Please use a business email (e.g., name@company.com).";
+        showError(msg);
+        if (hiddenBiz) hiddenBiz.value = "false";
+        return;
+      }
+      clearError();
+      if (hiddenBiz) hiddenBiz.value = "true";
+
+      // propage la langue vers la page de succès
+      try {
+        var base = form.getAttribute('action') || './success.html';
+        var sep  = base.includes('?') ? '&' : '?';
+        var url  = base + sep + 'lang=' + encodeURIComponent(currentLang || 'fr');
+        form.setAttribute('action', url);
+      } catch(e) {}
+      // Pas de preventDefault : Netlify capture le POST.
+    });
+    return; // pas d'EmailJS quand Netlify est actif
+  }
+
+  // Fallback (sans Netlify) : EmailJS / mailto
+  try { if (EMAILJS.USER_ID) emailjs.init(EMAILJS.USER_ID); } catch(e) {}
+
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    clearError();
+
+    const email = (emailInput?.value || "").trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && isBusinessEmail(email);
+    if (!ok){
+      const msg = currentLang==="fr"
+        ? "Merci d’utiliser une adresse professionnelle (ex. nom@entreprise.com)."
+        : "Please use a business email (e.g., name@company.com).";
+      showError(msg);
+      return;
+    }
+
+    // Si EmailJS non configuré, fallback mailto
+    if (!EMAILJS.USER_ID || !EMAILJS.SERVICE_ID || !EMAILJS.TEMPLATE_ID){
+      window.location.href = `mailto:admin@bluekiosk.tech?subject=Waitlist&body=${encodeURIComponent(email)}`;
+      if (out) out.textContent = currentLang==="fr" ? "Merci !" : "Thanks!";
+      form.reset();
+      return;
+    }
+
+    try{
+      await emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, { email });
+      if (out) out.textContent = I18N[currentLang]["status.ok"];
+      form.reset();
+    }catch(err){
+      console.error(err);
+      if (out) out.textContent = I18N[currentLang]["status.err"];
+    }
+  });
+});
