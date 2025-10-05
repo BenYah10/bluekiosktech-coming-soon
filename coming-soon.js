@@ -10,6 +10,23 @@ const I18N = {
     "waitlist.placeholder": "vous@exemple.com",
     "waitlist.cta": "Rejoindre la liste d’attente",
     "waitlist.disclaimer": "Zéro spam. Nous vous écrirons uniquement au lancement.",
+    "waitlist.redirect": "Vous serez transféré pour remplir notre formulaire de liste d’attente.",
+
+    // Champs B2B (lead.html)
+    "lead.company": "Nom de la compagnie",
+    "lead.activity": "Activité",
+    "lead.activity.placeholder": "Choisir…",
+    "lead.activity.gym": "Gym",
+    "lead.activity.complex": "Complexe sportif",
+    "lead.activity.office": "Entreprise (bureaux)",
+    "lead.activity.campus": "Campus",
+    "lead.activity.university": "Université",
+    "lead.activity.hospital": "Hôpitaux",
+    "lead.machines": "Nb. de machines prévues", // conservé si jamais utile ailleurs
+    "lead.audience": "Nb d’adhérents/employés/étudiants",
+    "lead.address": "Adresse",
+    "lead.message": "Message (500 mots max)",
+    "lead.submit": "Envoyer & rejoindre la liste d’attente",
 
     // KPIs & cartes
     "kpi.1": "Germes éliminés",
@@ -34,7 +51,7 @@ const I18N = {
     "success.lead2": "En attendant, suivez nos mises à jour et invitez votre gym, bureau ou campus à manifester son intérêt.",
     "success.back": "← Retour à l’accueil",
 
-    // Feedback (si tu l’utilises)
+    // Feedback
     "feedback.msg": "Votre avis nous est crucial pour finaliser notre prototype.",
     "feedback.cta": "Donner votre avis"
   },
@@ -49,6 +66,23 @@ const I18N = {
     "waitlist.placeholder": "you@example.com",
     "waitlist.cta": "Join the waitlist",
     "waitlist.disclaimer": "No spam. We’ll only contact you at launch.",
+    "waitlist.redirect": "You will be redirected to fill out our waitlist form.",
+
+    // B2B fields (lead.html)
+    "lead.company": "Company name",
+    "lead.activity": "Activity",
+    "lead.activity.placeholder": "Choose…",
+    "lead.activity.gym": "Gym",
+    "lead.activity.complex": "Sports complex",
+    "lead.activity.office": "Office (company)",
+    "lead.activity.campus": "Campus",
+    "lead.activity.university": "University",
+    "lead.activity.hospital": "Hospitals",
+    "lead.machines": "Planned machines",
+    "lead.audience": "Members/Employees/Students count",
+    "lead.address": "Address",
+    "lead.message": "Message (max 500 words)",
+    "lead.submit": "Send & join the waitlist",
 
     // KPIs & cards
     "kpi.1": "Germs eliminated",
@@ -73,7 +107,7 @@ const I18N = {
     "success.lead2": "Meanwhile, follow our updates and invite your gym, office or campus to express interest.",
     "success.back": "← Back to home",
 
-    // Feedback (if used)
+    // Feedback
     "feedback.msg": "Your feedback is crucial to finalize our prototype.",
     "feedback.cta": "Give feedback"
   }
@@ -85,7 +119,6 @@ let currentLang =
 
 function applyI18n(lang){
   const dict = I18N[lang] || I18N.en;
-
 
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k = el.getAttribute("data-i18n");
@@ -108,162 +141,160 @@ function applyI18n(lang){
     if (m && dict["og.title"]) m.setAttribute("content", dict["og.title"]);
   });
 
-  document.getElementById("lang-fr")?.classList.toggle("is-active", lang==="fr");
-  document.getElementById("lang-en")?.classList.toggle("is-active", lang==="en");
-  document.getElementById("lang-fr")?.setAttribute("aria-pressed", String(lang==="fr"));
-  document.getElementById("lang-en")?.setAttribute("aria-pressed", String(lang==="en"));
+  const frBtn = document.getElementById("lang-fr");
+  const enBtn = document.getElementById("lang-en");
+  frBtn?.classList.toggle("is-active", lang==="fr");
+  enBtn?.classList.toggle("is-active", lang==="en");
+  frBtn?.setAttribute("aria-pressed", String(lang==="fr"));
+  enBtn?.setAttribute("aria-pressed", String(lang==="en"));
 
   localStorage.setItem("lang", lang);
   currentLang = lang;
 
-  // si le champ caché existe, on le met à jour aussi
   const hiddenLang = document.getElementById("waitlist-lang");
   if (hiddenLang) hiddenLang.value = lang;
+
+  const lp = document.getElementById("link-privacy") ||
+             document.querySelector('a[data-i18n="footer.privacy"]');
+  if (lp) {
+    try {
+      const u = new URL(lp.getAttribute("href"), window.location.href);
+      u.searchParams.set("lang", lang);
+      lp.setAttribute("href", u.toString());
+    } catch(e) {}
+  }
+}
+
+// --- domaines publics à refuser (adresse pro requise) ---
+const BLOCKED_DOMAINS = new Set([
+  "gmail.com","googlemail.com","yahoo.com","ymail.com","aol.com",
+  "outlook.com","hotmail.com","live.com","msn.com","icloud.com","me.com",
+  "protonmail.com","pm.me","gmx.com","mail.com",
+  "yopmail.com","mailinator.com","guerrillamail.com","10minutemail.com",
+  "tempmail.com","discard.email","sharklasers.com",
+  "orange.fr","wanadoo.fr","free.fr","sfr.fr","laposte.net","bbox.fr","neuf.fr",
+  "hotmail.fr","outlook.fr","live.fr"
+]);
+
+function isBusinessEmail(email){
+  const m = (email||"").toLowerCase().match(/^[^\s@]+@([^@\s]+)$/);
+  return !!(m && !BLOCKED_DOMAINS.has(m[1]));
+}
+function wordCount(s=""){ return (s.trim().match(/\S+/g) || []).length; }
+
+function showError(out, emailInput, msg){
+  if (out) out.textContent = msg;
+  if (emailInput){
+    emailInput.setAttribute("aria-invalid","true");
+    emailInput.focus();
+  }
+}
+function clearError(out, emailInput){
+  if (out) out.textContent = "";
+  if (emailInput) emailInput.removeAttribute("aria-invalid");
+}
+
+function bindLangSwitch(){
+  const fr = document.getElementById("lang-fr");
+  const en = document.getElementById("lang-en");
+  if (fr) fr.onclick = (e)=>{ e.preventDefault(); applyI18n("fr"); };
+  if (en) en.onclick = (e)=>{ e.preventDefault(); applyI18n("en"); };
+  const wrap = document.querySelector(".lang-switch");
+  if (wrap){
+    wrap.addEventListener("click", (e)=>{
+      const btn = e.target && e.target.closest && e.target.closest("#lang-fr, #lang-en");
+      if (!btn) return;
+      e.preventDefault();
+      applyI18n(btn.id === "lang-fr" ? "fr" : "en");
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  // i18n init + switchers
+  // i18n + switchers
   applyI18n(currentLang);
-  document.getElementById("lang-fr")?.addEventListener("click", (e)=>{ e.preventDefault(); applyI18n("fr"); });
-  document.getElementById("lang-en")?.addEventListener("click", (e)=>{ e.preventDefault(); applyI18n("en"); });
+  bindLangSwitch();
 
   // year
   const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
-
-  // emailjs (ne servira QUE si on n'utilise pas Netlify)
-  const EMAILJS = {
-    USER_ID: "YOUR_EMAILJS_PUBLIC_KEY",
-    SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",
-    TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"
-  };
-
-  // Délégation de clic de sécurité (si le switch est ailleurs dans le DOM)
-  document.addEventListener('click', (e) => {
-    const t = e.target;
-    if (!t) return;
-    const frBtn = t.id === 'lang-fr' ? t : t.closest?.('#lang-fr');
-    const enBtn = t.id === 'lang-en' ? t : t.closest?.('#lang-en');
-    if (frBtn) { e.preventDefault?.(); applyI18n('fr'); }
-    if (enBtn) { e.preventDefault?.(); applyI18n('en'); }
-  });
-
-  // dans coming-soon.js (côté index), après avoir déterminé la langue courante `lang`
-const lp = document.getElementById("link-privacy");
-if (lp) {
-    const u = new URL(lp.getAttribute("href"), window.location.href);
-    u.searchParams.set("lang", currentLang);  // <— utiliser currentLang !
-    lp.setAttribute("href", u.toString());
+  if (y && !y.dataset.done){
+    y.textContent = new Date().getFullYear();
+    y.dataset.done = "1";
   }
 
-
-  // ====== WAITLIST FORM ======
+  // ====== WAITLIST (index.html ou lead.html) ======
   const form = document.getElementById("waitlist");
-  const out  = document.getElementById("wl-done");
-  const emailInput = document.getElementById("waitlist-email");
-  const isNetlify = !!(form && form.hasAttribute("data-netlify"));
-
-  // champs cachés
-  const hiddenLang = document.getElementById("waitlist-lang");
-  if (hiddenLang) hiddenLang.value = currentLang;
-  const hiddenBiz  = document.getElementById("is-business"); // optionnel (pour Netlify Forms)
-
-  // --- liste de domaines grand public à refuser (adresse pro requise) ---
-  const BLOCKED_DOMAINS = new Set([
-    // Global
-    "gmail.com","googlemail.com","yahoo.com","ymail.com","aol.com",
-    "outlook.com","hotmail.com","live.com","msn.com","icloud.com","me.com",
-    "protonmail.com","pm.me","gmx.com","mail.com",
-    // Disposable / temporaires
-    "yopmail.com","mailinator.com","guerrillamail.com","10minutemail.com",
-    "tempmail.com","discard.email","sharklasers.com",
-    // FR & EU courants
-    "orange.fr","wanadoo.fr","free.fr","sfr.fr","laposte.net","bbox.fr","neuf.fr",
-    "hotmail.fr","outlook.fr","live.fr"
-  ]);
-
-  function isBusinessEmail(email){
-    const m = (email||"").toLowerCase().match(/^[^@\s]+@([^@\s]+)$/);
-    if (!m) return false;
-    const domain = m[1];
-    return !BLOCKED_DOMAINS.has(domain);
-  }
-  function showError(msg){
-    if (out) out.textContent = msg;
-    if (emailInput){
-      emailInput.setAttribute("aria-invalid","true");
-      emailInput.focus();
-    }
-  }
-  function clearError(){
-    if (out) out.textContent = "";
-    if (emailInput) emailInput.removeAttribute("aria-invalid");
-  }
-
   if (!form) return;
 
-  if (isNetlify) {
-    // Netlify Forms : on valide et on ajoute ?lang=xx, puis on laisse partir
-    form.addEventListener('submit', function (e) {
-      const email = (emailInput?.value || "").trim();
+  const out  = document.getElementById("wl-done");
+  const emailInput   = document.getElementById("waitlist-email");
+  const audienceInput = document.getElementById("machines");  // id conservé
+  const messageInput  = document.getElementById("message");   // seulement lead.html
+  const hiddenLang    = document.getElementById("waitlist-lang");
+  if (hiddenLang) hiddenLang.value = currentLang;
 
-      // format minimal (HTML5 + pattern côté input) + filtre "pro"
-      if (!isBusinessEmail(email)) {
+  // MODE 1: INDEX (email seul) => redirection vers lead.html
+  const isIndexMinimal = !audienceInput && !messageInput;
+  if (isIndexMinimal){
+    form.addEventListener("submit", (e)=>{
+      clearError(out, emailInput);
+      const email = (emailInput?.value || "").trim();
+      const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && isBusinessEmail(email);
+      if (!okEmail){
         e.preventDefault();
-        const msg = currentLang==="fr"
+        const msg = currentLang === "fr"
           ? "Merci d’utiliser une adresse professionnelle (ex. nom@entreprise.com)."
           : "Please use a business email (e.g., name@company.com).";
-        showError(msg);
-        if (hiddenBiz) hiddenBiz.value = "false";
-        return;
+        return showError(out, emailInput, msg);
       }
-      clearError();
-      if (hiddenBiz) hiddenBiz.value = "true";
-
-      // propage la langue vers la page de succès
-      try {
-        var base = form.getAttribute('action') || './success.html';
-        var sep  = base.includes('?') ? '&' : '?';
-        var url  = base + sep + 'lang=' + encodeURIComponent(currentLang || 'fr');
-        form.setAttribute('action', url);
-      } catch(e) {}
-      // Pas de preventDefault : Netlify capture le POST.
+      e.preventDefault();
+      window.location.href = `lead.html?email=${encodeURIComponent(email)}&lang=${encodeURIComponent(currentLang)}`;
     });
-    return; // pas d'EmailJS quand Netlify est actif
+    return;
   }
 
-  // Fallback (sans Netlify) : EmailJS / mailto
-  try { if (EMAILJS.USER_ID) emailjs.init(EMAILJS.USER_ID); } catch(e) {}
+  // MODE 2: LEAD (formulaire B2B) => validations + POST natif vers /api/waitlist
+  form.addEventListener("submit", (e)=>{
+    clearError(out, emailInput);
 
-  form.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    clearError();
-
+    // Email pro
     const email = (emailInput?.value || "").trim();
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && isBusinessEmail(email);
-    if (!ok){
-      const msg = currentLang==="fr"
+    const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && isBusinessEmail(email);
+    if (!okEmail){
+      e.preventDefault();
+      const msg = currentLang === "fr"
         ? "Merci d’utiliser une adresse professionnelle (ex. nom@entreprise.com)."
         : "Please use a business email (e.g., name@company.com).";
-      showError(msg);
-      return;
+      return showError(out, emailInput, msg);
     }
 
-    // Si EmailJS non configuré, fallback mailto
-    if (!EMAILJS.USER_ID || !EMAILJS.SERVICE_ID || !EMAILJS.TEMPLATE_ID){
-      window.location.href = `mailto:admin@bluekiosk.tech?subject=Waitlist&body=${encodeURIComponent(email)}`;
-      if (out) out.textContent = currentLang==="fr" ? "Merci !" : "Thanks!";
-      form.reset();
-      return;
+    // Audience (obligatoire, juste un nombre — pas de min/max)
+    const raw = (audienceInput?.value || "").trim();
+    const n = Number(raw);
+    if (raw === "" || !Number.isFinite(n)){
+      e.preventDefault();
+      return showError(
+        out,
+        emailInput,
+        currentLang === "fr"
+          ? "Veuillez saisir un nombre valide pour le nombre d’adhérents/employés/étudiants."
+          : "Please enter a valid number for members/employees/students."
+      );
     }
 
-    try{
-      await emailjs.send(EMAILJS.SERVICE_ID, EMAILJS.TEMPLATE_ID, { email });
-      if (out) out.textContent = I18N[currentLang]["status.ok"];
-      form.reset();
-    }catch(err){
-      console.error(err);
-      if (out) out.textContent = I18N[currentLang]["status.err"];
+    // 500 mots max pour le message (inchangé)
+    const maxWords = parseInt(messageInput?.dataset.maxwords || "500", 10);
+    const wc = wordCount(messageInput?.value || "");
+    if (wc > maxWords){
+      e.preventDefault();
+      return showError(
+        out,
+        emailInput,
+        currentLang==="fr" ? `Le message doit faire ${maxWords} mots maximum.`
+                           : `Message must be at most ${maxWords} words.`
+      );
     }
+
+    // POST natif vers /api/waitlist (lead.html fournit aussi MachineCount caché)
   });
 });
