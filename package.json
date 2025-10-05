@@ -1,0 +1,16 @@
+{
+  "name": "bluekiosktech-coming-soon",
+  "private": true,
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo \"no build\""
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
