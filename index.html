@@ -29,10 +29,10 @@
   <!-- ===== Favicons ===== -->
   <!-- Favicons / Favicon for Google Search -->
 
-<link rel="icon" type="image/png" sizes="32x32"  href="/images/favicon-B.png?v=4">
-<link rel="icon" href="/favicon-B.ico?v=4"> <!-- fallback -->
+<link rel="icon" type="image/png" sizes="32x32"  href="./images/favicon-B.png?v=4">
+<link rel="icon" href="./favicon-B.ico?v=4"> <!-- fallback -->
 <meta name="theme-color" content="#0b1020">
-<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=4">
+<link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png?v=4">
 
 
   <!-- ===== JSON-LD (Organization + Website) ===== -->
@@ -68,8 +68,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet"/>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="/coming-soon.css" />
-  <script src="coming-soon.js" defer></script>
+  <link rel="stylesheet" href="./coming-soon.css"/>
+  <script src="./coming-soon.js" defer></script>
 </head>
 
 <body>
@@ -122,17 +122,32 @@
         </p>
 
         <!-- Email capture -->
-        <form id="waitlist" class="waitlist" novalidate>
+        <form id="waitlist" name="waitlist" class="waitlist"
+      method="POST" action="./success.html"
+      data-netlify="true" netlify-honeypot="bot-field">
+
+        <!-- requis par Netlify -->
+       <input type="hidden" name="form-name" value="waitlist">
+           <!-- honeypot anti-spam -->
+           <p hidden aria-hidden="true"><label>Ne pas remplir :
+        <input name="bot-field"></label></p>
+
           <div class="field">
-            <input id="email" name="email" type="email"
-                   placeholder="vous@exemple.com" data-i18n-placeholder="waitlist.placeholder" required />
-            <button type="submit" class="btn-primary" data-i18n="waitlist.cta">Rejoindre la liste d’attente</button>
-          </div>
-          <p class="foot" data-i18n="waitlist.disclaimer">
-            Zéro spam. Nous vous écrirons uniquement au lancement.
-          </p>
-          <div id="wl-done" class="wl-done" role="status" aria-live="polite"></div>
-          <!-- Bloc feedback vers la drop page -->
+              <input id="waitlist-email" name="Email" type="email"
+                      placeholder="vous@exemple.com" data-i18n-placeholder="waitlist.placeholder" required />
+                    <button type="submit" class="btn-primary" data-i18n="waitlist.cta">
+                      Rejoindre la liste d’attente
+                    </button>
+         </div>
+
+               <!-- on loge la langue de l’UI -->
+             <input type="hidden" name="Lang" id="waitlist-lang" value="fr">
+
+             <p class="foot" data-i18n="waitlist.disclaimer">
+               Zéro spam. Nous vous écrirons uniquement au lancement.
+             </p>
+
+             <!-- Bloc feedback vers la drop page -->
             <div class="feedback-cta">
               <div class="field">
                 <div class="msg" data-i18n="feedback.msg">
@@ -147,7 +162,11 @@
                </div>
            </div>
 
+
+               <!-- (facultatif, on garde l’élément si ton CSS l’utilise) -->
+            <div id="wl-done" class="wl-done" role="status" aria-live="polite"></div>
         </form>
+
 
         <div class="kpis">
           <div class="kpi">
@@ -197,7 +216,7 @@
         <h3 data-i18n="footer.contact.title">Contact</h3>
         <p><a href="mailto:admin@bluekiosk.tech">admin@bluekiosk.tech</a></p>
         <!-- Garde le nom du fichier qui existe réellement chez toi (privacy.html ou privacy-policy.html) -->
-        <p><a href="privacy.html" target="_blank" rel="noopener" data-i18n="footer.privacy">Politique de confidentialité</a></p>
+        <p><a "link-privacy" href="./privacy.html" target="_blank" rel="noopener" data-i18n="footer.privacy">Politique de confidentialité</a></p>
       </div>
     </div>
 
