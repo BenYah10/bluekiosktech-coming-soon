@@ -230,7 +230,11 @@ body{
 .btn-primary:hover{transform:translateY(-1px)}
 .btn-primary:active{transform:translateY(0)}
 .waitlist .foot{color:var(--muted); font-size:13px; margin:8px 4px 0}
-.wl-done{margin-top:10px; min-height:20px; font-weight:600}
+.wl-done{margin-top:10px;
+   min-height:20px;
+    font-weight:600;
+    color:crimson
+  }
 
 /* =========================
    KPI + CARDS
@@ -382,5 +386,78 @@ body{
 @media (max-width: 9999px){
   .site-header .socials{ flex-direction: column !important; align-items: flex-end !important; }
 
+}
+
+/* =========================================
+   SUCCESS PAGE — SPACING FIX (logo ↔ message)
+   -----------------------------------------
+   • Ne change PAS la taille du logo .logo-anim
+   • Réduit l’écart à ~2 lignes max sur mobile
+   • Laisse un peu plus d’air sur grand écran
+   ========================================= */
+.success-unit{
+  /* Le conteneur grid qui empile: [logo animé] puis [message] */
+  display: grid;
+  justify-items: center;
+  row-gap: 1rem;           /* mobile: ~2 lignes */
+  margin-block-start: 8px; /* très léger espace sous le header */
+  margin-block-end: 56px;
+}
+.logo-anim{
+  /* Taille inchangée, on supprime juste toute marge parasite */
+  margin: 0;
+  display: block;
+}
+.success-hero{
+  margin-top: 0;
+}
+.success-hero h1{
+  margin-top: 0;
+}
+
+/* Petits écrans → écart serré (≈ 2 lignes) */
+@media (max-width: 480px){
+  .success-unit{ row-gap: 0.5rem; }  /* ajuste à 0.8rem si tu veux encore + serré */
+}
+
+/* Écrans moyens → un chouïa plus d’air */
+@media (min-width: 481px){
+  .success-unit{ row-gap: 1.2rem; }
+}
+
+/* Grands écrans → confortable sans être “loose” */
+@media (min-width: 960px){
+  .success-unit{ row-gap: 1.4rem; }
+}
+
+/* --- Fix mobile: rendre les overlays transparents aux clics et
+   garantir un z-index au-dessus pour le switch de langue --- */
+
+.site-header,
+.policy-page .site-header {
+  position: relative;
+  z-index: 1;
+}
+
+/* Si vous avez des pseudo-éléments décoratifs (grille, dégradés, lueurs)
+   sur le header/hero, ils ne doivent pas capter les événements */
+.site-header::before,
+.site-header::after,
+.hero::before,
+.hero::after {
+  pointer-events: none !important;
+}
+
+/* Le switch de langue passe au-dessus */
+.lang-switch {
+  position: relative;
+  z-index: 10;
+}
+.lang-switch button,
+.lang-switch .lang-btn {
+  position: relative;
+  z-index: 11;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
