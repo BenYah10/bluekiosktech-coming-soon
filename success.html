@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Merci — BlueKioskTech</title>
+
+  <!-- Feuille principale de ton site -->
+  <link rel="stylesheet" href="./coming-soon.css" />
+
+  <!-- Styles locaux (logo animé + espacement maîtrisé) -->
+  <style>
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+    /* Conteneur 2 lignes : 1) logo animé, 2) message.
+       row-gap = ~2 lignes pour contrôler l’espacement avec précision. */
+    .success-unit {
+      display: grid;
+      justify-items: center;
+      row-gap: 2lh;            /* ~2 lignes d’écart */
+      margin: 12px auto 64px;  /* petit top, bon bas */
+    }
+    @supports not (height: 1lh) { .success-unit { row-gap: 2.4rem; } } /* fallback */
+
+    /* Logo animé x10 (≈ 960px), limité à la largeur de l’écran */
+    .logo-anim {
+      width: min(250px, 100vw);
+      height: auto;
+      display: inline-block;
+      filter: drop-shadow(0 4px 14px rgba(16,185,129,.35));
+      animation: float 2s ease-in-out infinite, glow 1s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0) } 70% { transform: translateY(-6px) } }
+    @keyframes glow  { 0%,100% { filter: drop-shadow(0 4px 10px rgba(16,185,129,.25)) }
+                       50%     { filter: drop-shadow(0 6px 18px rgba(16,185,129,.55)) } }
+    @media (prefers-reduced-motion: reduce) { .logo-anim { animation: none } }
+
+    /* Bloc message */
+    .success-hero { max-width: 720px; text-align: center; }
+    .success-hero h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.2; margin: 0 0 12px; }
+    .success-hero p  { opacity: .9; margin: 0 auto 14px; max-width: 60ch; }
+
+    /* Bouton retour */
+    .actions { margin-top: 18px; }
+    .btn-primary {
+      display: inline-block; padding: 12px 18px; border-radius: 999px;
+      text-decoration: none; font-weight: 600; box-shadow: 0 6px 20px rgba(0,0,0,.12);
+      background: #10b981; color: #04121a;
+    }
+  </style>
+
+  <!-- Détermine la langue du document :
+       1) lit ?lang=en|fr si présent (préférence forte pour les tests locaux),
+       2) sinon lit localStorage('lang'),
+       3) sinon déduit du navigateur.  -->
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      var fromQuery = q.get('lang');
+      var saved = localStorage.getItem('lang');
+      var lang = fromQuery || saved || (navigator.language && navigator.language.startsWith('fr') ? 'fr' : 'en');
+      document.documentElement.lang = lang;
+      if (fromQuery) localStorage.setItem('lang', fromQuery); // on mémorise aussi
+    })();
+  </script>
+</head>
+
+<body class="policy-page">
+  <!-- ===== Header conservé (logo non animé) ===== -->
+  <header class="site-header">
+    <div class="wrap">
+      <a href="./" class="brand">
+        <img src="./images/logo-ca.png" alt="BlueKioskTech.ca" />
+      </a>
+      <!-- Si ton header global contient un switch FR/EN, laisse-le. -->
+    </div>
+  </header>
+
+  <!-- ===== Bloc succès : 1) logo animé, 2) message à ~2 lignes ===== -->
+  <main class="wrap">
+    <section class="success-unit">
+      <!-- 1) Logo animé x10 (SVG placé dans ./images/logo-anim.svg) -->
+      <img src="./images/logo-anim.svg" alt="" class="logo-anim" aria-hidden="true" />
+
+      <!-- 2) Message bilingue contrôlé par coming-soon.js via data-i18n -->
+      <div class="success-hero">
+        <h1 data-i18n="success.title">Merci — votre inscription est confirmée.</h1>
+        <p class="lead" data-i18n="success.lead1">
+          Nous avons bien reçu votre demande pour rejoindre la liste d’attente.
+          Vous recevrez un e-mail dès l’ouverture du déploiement dans votre zone.
+        </p>
+        <p class="lead" data-i18n="success.lead2">
+          En attendant, suivez nos mises à jour et invitez votre gym, bureau ou campus à manifester son intérêt.
+        </p>
+        <div class="actions">
+          <a href="./index.html" class="btn-primary" data-i18n="success.back">← Retour à l’accueil</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Script i18n (applique les textes success.* selon la langue) -->
+  <script src="./coming-soon.js" defer></script>
+</body>
+</html>
