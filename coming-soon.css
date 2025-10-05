@@ -229,7 +229,12 @@ body{
 }
 .btn-primary:hover{transform:translateY(-1px)}
 .btn-primary:active{transform:translateY(0)}
-.waitlist .foot{color:var(--muted); font-size:13px; margin:8px 4px 0}
+.waitlist .foot{
+  color:var(--muted);
+   font-size:13px;
+    margin:8px 4px 0;
+    color:limegreen
+  }
 .wl-done{margin-top:10px;
    min-height:20px;
     font-weight:600;
@@ -461,3 +466,36 @@ body{
   -webkit-tap-highlight-color: transparent;
 }
 
+/* =========================================
+   AJOUT MINIMAL POUR LE FORMULAIRE B2B
+   (garde le style existant, juste la grille)
+   ========================================= */
+.lead-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.lead-grid .full{
+  grid-column: 1 / -1;
+}
+.lead-grid label{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lead-grid input,
+.lead-grid select,
+.lead-grid textarea{
+  background: transparent;
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 12px;
+  color: var(--text);
+  padding: 12px 14px;
+}
+.lead-grid textarea{ resize: vertical; }
+
+@media (max-width: 720px){
+  .lead-grid{
+    grid-template-columns: 1fr;
+  }
+}
