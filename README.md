@@ -28,7 +28,7 @@ Official Company Website
 
 ## 🌍 About
 
-**BlueKioskTech.ca** is the official corporate website of **BlueKiosk**, a Canadian clean-tech startup developing innovative self-service hygiene solutions.
+**BlueKioskTech.ca** is the official corporate website of **BlueKioskTech**, a Canadian clean-tech startup developing innovative self-service hygiene solutions.
 
 This website represents the company's digital identity, introducing our vision, mission and future ambitions while allowing early adopters to join our waiting list before the official launch.
 
@@ -40,7 +40,7 @@ Unlike our product website, **BlueKioskTech.ca** focuses on the company behind t
 
 The website has been designed to:
 
-- 🌐 Present the BlueKiosk company
+- 🌐 Present the BlueKioskTech company
 - 🚀 Share our clean-tech vision
 - 📩 Build an early waiting list
 - 🤝 Connect with future customers and partners
@@ -117,7 +117,7 @@ bluekiosktech-coming-soon/
 
 ## 💡 Vision
 
-BlueKioskTech.ca is the digital gateway to the BlueKiosk ecosystem.
+BlueKioskTech.ca is the digital gateway to the BlueKioskTech ecosystem.
 
 As the company grows, this platform will evolve into the official corporate website showcasing our products, technologies, partnerships and innovation roadmap.
 
@@ -141,6 +141,6 @@ https://www.bluekiosktech.ca
 
 ## 📄 License
 
-This repository is part of the BlueKiosk Ecosystem.
+Official corporate website for BlueKioskTech — presenting the company's vision, mission and commercial launch.
 
 © BlueKioskTech — All Rights Reserved.
