@@ -1,16 +1,18 @@
 {
-  "name": "bluekiosktech-coming-soon",
+  "name": "bluekiosktech-corporate",
   "private": true,
-  "version": "1.0.0",
-  "license": "UNLICENSED",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Site corporatif bilingue BlueKioskTech — fondation Astro (étape 01)",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo \"no build\""
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6"
-  },
-  "devDependencies": {
-    "typescript": "^5.4.0"
+    "astro": "^6.0.0"
   }
 }

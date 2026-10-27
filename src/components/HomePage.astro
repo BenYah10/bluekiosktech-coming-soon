@@ -1,0 +1,55 @@
+---
+/**
+ * Page d'accueil corporative — Phase 2 / lot L2.1.
+ * Hero BlueKioskTech et carrousel de quatre visuels conceptuels MatMatic/VUCS.
+ * Préserve tous les textes, CTA, routes et sections existants.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import SolutionsShowcase from './SolutionsShowcase.astro';
+import HeroCarousel from './HeroCarousel.astro';
+import AboutCompany from './AboutCompany.astro';
+import PartnershipsTeaser from './PartnershipsTeaser.astro';
+import { pathFor, translation, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = translation(locale).home;
+---
+<SiteLayout locale={locale} route="home">
+  <!-- SECTION 01 : Hero corporate — médias conceptuels MatMatic/VUCS en carrousel. -->
+  <section class="hero-shell" aria-labelledby="home-hero-heading">
+    <div class="container hero">
+      <div class="hero-copy">
+        <div class="hero-intro"><span class="hero-intro-line" aria-hidden="true"></span><span class="eyebrow">{t.eyebrow}</span></div>
+        <h1 id="home-hero-heading">{t.headline}</h1>
+        <p>{t.lead}</p>
+        <div class="hero-buttons">
+          <a class="button button-dark hero-primary" href="#solutions">{t.cta} <span aria-hidden="true">→</span></a>
+          <a class="button button-outline" href={pathFor(locale,'about')}>{t.secondaryCta} <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-signature">
+          <span class="signature-icons" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>{t.visualCaption}</span>
+        </div>
+      </div>
+      <HeroCarousel locale={locale} />
+    </div>
+  </section>
+
+  <section class="pillars-shell" aria-label={locale === 'fr' ? 'Nos engagements' : 'Our approach'}>
+    <div class="container pillars-grid">
+      {t.pillars.map((pillar, index) => <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">{['✳', '◎', '✦', '◇'][index]}</span>
+        <div><h2>{pillar.title}</h2><p>{pillar.body}</p></div>
+      </div>)}
+    </div>
+  </section>
+
+  <!-- SECTION 03 : Deux projets présentés à égalité, visuels conceptuels temporaires. -->
+  <SolutionsShowcase locale={locale} />
+
+  <!-- SECTION 04 : identité de l'entreprise / mission, vision et approche. -->
+  <AboutCompany locale={locale} />
+
+  <!-- SECTION 05 : ouverture B2B, sans promesses commerciales non validées. -->
+  <PartnershipsTeaser locale={locale} />
+</SiteLayout>

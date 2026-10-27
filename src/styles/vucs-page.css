@@ -1,0 +1,101 @@
+/*
+ * BlueKioskTech — habillage Solutions VUCS (lot L2.3).
+ * Feuille isolée par préfixe vucs- pour éviter toute régression du Hero Accueil
+ * et des autres pages Astro. Aucun style des formulaires n'est modifié.
+ * L2.3 : images portrait et paysage sans hauteur imposée,
+ * avec proportions naturelles sur desktop et mobile.
+ */
+.vucs-hero { background:linear-gradient(115deg,#f6fafc 0%,#fff 54%,#eaf5f7 100%);overflow:hidden;border-bottom:1px solid #e1ebf2; }
+.vucs-hero-layout { display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);align-items:center;gap:clamp(30px,4vw,70px);padding-block:clamp(60px,7.2vw,105px); }
+.vucs-hero-copy { min-width:0; }
+.vucs-eyebrow { display:block;margin-bottom:16px; }
+.vucs-status { display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #bde7e8;border-radius:100px;background:#e8f8fa;color:#0f5665;font-size:.75rem;font-weight:800; }
+.vucs-status-dot { width:7px;height:7px;background:#13b8c8;border-radius:50%; }
+.vucs-hero h1 {font-size:clamp(2.65rem,4.3vw,4.5rem);font-weight:850;line-height:1.075;letter-spacing:-.052em;text-wrap:balance;color:#0c2545;margin:22px 0 23px;}
+.vucs-hero-subtitle { font-weight:700;color:#12406b;line-height:1.52;font-size:clamp(1.04rem,1.35vw,1.17rem);margin:0 0 13px;max-width:570px; }
+.vucs-hero-detail { color:#486078;line-height:1.67;font-size:.99rem;max-width:570px;margin:0; }
+.vucs-actions { display:flex;flex-wrap:wrap;gap:12px;margin-top:28px; }
+.vucs-actions .button { gap:13px; }
+.vucs-stage { display:flex;align-items:center;gap:10px;margin:25px 0 0;padding-top:19px;border-top:1px solid #d7e5ee;color:#5b7085;font-size:.82rem;line-height:1.5; }
+.vucs-stage span {color:#0b9baf;}
+/* Taille fluide : hauteur auto prime sur les attributs height des balises <img>. */
+.vucs-hero-figure { margin:0;min-width:0;position:relative; }
+.vucs-hero-figure img { display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;object-position:center;border-radius:14px;box-shadow:0 25px 55px rgba(12,37,69,.19); }
+.vucs-hero-figure figcaption { display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:9px;color:#586c82;font-size:.76rem;padding-top:11px;line-height:1.5; }
+.vucs-image-note { border-radius:4px;background:#123857;color:#fff;font-size:.7rem;font-weight:650;padding:5px 9px; }
+.vucs-section { padding-block:clamp(72px,7.4vw,112px); }
+.vucs-section h2,.vucs-pilot h2 { font-size:clamp(2.1rem,3.2vw,3.25rem);letter-spacing:-.043em;line-height:1.13;color:#0c2545;margin:16px 0 21px;text-wrap:balance; }
+.vucs-section-lead { color:#52667c;line-height:1.76;font-size:1.06rem;margin:0; }
+.vucs-section-heading { max-width:760px;margin-bottom:35px; }
+.vucs-discovery { background:#fff; }
+.vucs-discovery-layout { display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(35px,5vw,78px);align-items:center; }
+.vucs-product-figure { margin:0;min-width:0;background:linear-gradient(145deg,#f2f4f7,#e5e9ec);border-radius:15px;overflow:hidden;border:1px solid #e0e9f0; }
+.vucs-product-figure img { display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain; }
+.vucs-product-figure figcaption { background:#f1f6fa;color:#6a7b8d;padding:11px 15px;font-size:.77rem;line-height:1.4; }
+.vucs-feature-list { list-style:none;padding:0;margin:25px 0 0; }
+.vucs-feature-list li { display:flex;gap:14px;padding:15px 0;border-top:1px solid #e6edf2; }
+.vucs-feature-marker { display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:28px;height:28px;background:#e5f9fa;color:#0b8496;border-radius:50%;font-weight:850; }
+.vucs-feature-list strong { color:#133654;font-size:.99rem; }
+.vucs-feature-list p { color:#566b7f;margin:5px 0 0;line-height:1.63;font-size:.91rem; }
+.vucs-steps { background:#f4f8fb;border-block:1px solid #e7eef4; }
+.vucs-center { text-align:center;margin-inline:auto; }
+.vucs-step-grid { list-style:none;padding:0;margin:38px 0 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px; }
+.vucs-step-card { background:#fff;border:1px solid #e0e9f1;border-radius:13px;padding:32px 27px;box-shadow:0 8px 23px rgba(19,62,96,.035); }
+.vucs-step-num { display:inline-flex;font-size:.88rem;letter-spacing:.09em;font-weight:850;color:#0b9baf;padding-bottom:12px;border-bottom:3px solid #d8b26c; }
+.vucs-step-card h3 {font-size:1.21rem;letter-spacing:-.02em;line-height:1.3;color:#0c2545;margin:23px 0 9px;}
+.vucs-step-card p { color:#586b7e;font-size:.96rem;line-height:1.67;margin:0; }
+.vucs-steps-note { text-align:center;color:#697f90;font-size:.82rem;line-height:1.55;margin:18px 0 0; }
+.vucs-benefits { background:#fff; }
+.vucs-benefits-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px; }
+.vucs-benefit-card { padding:27px 25px;background:linear-gradient(145deg,#f5f9fc,#ecf4f9);border:1px solid #e4edf3;border-radius:12px; }
+.vucs-benefit-index { color:#0b9baf;font-size:.8rem;font-weight:850;letter-spacing:.1em; }
+.vucs-benefit-card h3 { font-size:1.18rem;line-height:1.3;color:#102b4c;margin:20px 0 9px; }
+.vucs-benefit-card p { color:#566c80;line-height:1.65;font-size:.94rem;margin:0; }
+.vucs-video { background:#f6f9fc;border-top:1px solid #e8eef3; }
+.vucs-video-layout { display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:clamp(30px,5vw,78px); }
+.vucs-video-figure { position:relative;margin:0;overflow:hidden;border-radius:13px;background:#cfdeeb; }
+.vucs-video-figure img { display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain; }
+.vucs-video-figure figcaption { position:absolute;right:12px;bottom:12px;background:#102b4cbf;color:#fff;font-size:.74rem;padding:8px 11px;border-radius:4px; }
+.vucs-video-status { display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding:10px 15px;border:1px solid #c9dae6;background:#e8f2f8;border-radius:5px;color:#174b72;font-size:.84rem;font-weight:750;line-height:1.45; }
+.vucs-pilot { background:linear-gradient(120deg,#081321,#09293d 60%,#125063);padding-block:clamp(75px,8vw,112px);position:relative;overflow:hidden; }
+.vucs-pilot::after { content:"";position:absolute;right:-180px;top:-170px;width:540px;height:540px;border:1px solid #7ad6f73c;border-radius:50%;box-shadow:0 0 0 95px #7ad6f70b,0 0 0 195px #7ad6f707;pointer-events:none; }
+.vucs-pilot-content { position:relative;z-index:1; }
+.vucs-pilot h2 { color:#fff;max-width:790px; }
+.vucs-pilot-content > p:not(.vucs-pilot-note) { max-width:800px;color:#dceafa;line-height:1.78;font-size:1.06rem;margin:0; }
+.vucs-button-on-dark { background:transparent;color:#fff;border-color:#9dc4d7; }
+.vucs-button-on-dark:hover { background:#ffffff14;color:#fff; }
+.vucs-pilot-note { color:#9cc9df;font-size:.81rem;margin:22px 0 0;line-height:1.55; }
+.vucs-back { padding-block:33px 60px; }
+@media(max-width:1000px){
+  .vucs-hero-layout {gap:27px;}
+  .vucs-hero h1 {font-size:clamp(2.4rem,4.5vw,3.8rem);}
+}
+@media(max-width:780px){
+  .vucs-hero-layout,.vucs-discovery-layout,.vucs-video-layout {grid-template-columns:1fr;gap:32px;}
+  .vucs-hero-layout {padding-block:57px 61px;}
+  .vucs-hero h1 {max-width:650px;font-size:clamp(2.6rem,7.9vw,4rem);}
+  .vucs-hero-figure img {max-height:490px;}
+  .vucs-step-grid,.vucs-benefits-grid {grid-template-columns:1fr;gap:14px;}
+  .vucs-step-card,.vucs-benefit-card {padding:24px;}
+  .vucs-product-figure {max-width:640px;}
+  .vucs-video-layout {gap:26px;}
+}
+@media(max-width:430px){
+  .vucs-hero h1 {font-size:clamp(2.25rem,9.5vw,3rem);}
+  .vucs-actions {flex-direction:column;}
+  .vucs-actions .button {width:100%;}
+  .vucs-hero-figure figcaption {font-size:.69rem;}
+  .vucs-hero-detail {font-size:.94rem;}
+}
+@media(prefers-reduced-motion:reduce){
+  .vucs-actions .button {transition:none;}
+}
+
+/* VUCS portrait design study: retain the entire tall black-and-gold unit. */
+.vucs-product-figure { background:linear-gradient(135deg,#f3f0ee,#f9fafc);text-align:center; }
+.vucs-product-figure img { width:auto;max-width:100%;max-height:570px;height:auto;aspect-ratio:auto;object-fit:contain;margin-inline:auto; }
+.vucs-product-figure figcaption {text-align:left;}
+.vucs-dedicated-link {display:inline-flex;align-items:center;gap:9px;margin-top:24px;font-size:.92rem;font-weight:750;color:#0a609f;text-decoration:none;border-bottom:1px solid #8fb8cc;padding-bottom:5px;}
+.vucs-dedicated-link:hover {color:#063b65;}
+@media(max-width:780px){ .vucs-product-figure img {max-height:520px;} }
+@media(max-width:430px){ .vucs-product-figure img {max-height:440px;} }

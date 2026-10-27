@@ -1,0 +1,64 @@
+/*
+ * BlueKioskTech — Contact (étape 1.6).
+ * Styles isolés, FR/EN, desktop/mobile. Ne surcharge pas le header ni les cartes existantes.
+ */
+.bkt-contact-hero{background:linear-gradient(118deg,#fff 8%,#f1f8fd 100%);border-bottom:1px solid #e4edf5;padding-block:clamp(68px,7vw,112px)}
+.bkt-contact-hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;gap:clamp(36px,5vw,90px)}
+.bkt-contact-hero h1{font-size:clamp(2.5rem,4.6vw,4.8rem);line-height:1.07;letter-spacing:-.053em;color:#122b51;margin:22px 0 24px;text-wrap:balance;max-width:750px}
+.bkt-contact-lead{font-size:clamp(1rem,1.25vw,1.17rem);line-height:1.78;color:#4a627c;max-width:630px}
+.bkt-contact-pill{display:inline-flex;align-items:center;gap:10px;color:#47617a;font-size:.82rem;font-weight:650;margin-top:20px}
+.bkt-contact-pill span{width:8px;height:8px;background:#30b665;border-radius:100%}
+.bkt-contact-hero-aside{position:relative;overflow:hidden;border-radius:12px;background:linear-gradient(130deg,#10264a 7%,#225785);padding:clamp(27px,3vw,42px);color:#f2f8fd;box-shadow:0 28px 55px #153a6025}
+.bkt-contact-hero-aside::after{content:"";position:absolute;pointer-events:none;width:320px;height:320px;right:-160px;top:-160px;border-radius:50%;border:1px solid #c5eaff40;box-shadow:0 0 0 55px #c5eaff0a,0 0 0 115px #c5eaff08}
+.bkt-contact-shapes{display:flex;align-items:center;gap:13px;height:50px;margin-bottom:26px}/* Rounded triangle mask has built-in margins: these sizes equalize the visible marks. */
+.bkt-contact-shapes span{display:block;flex-shrink:0}
+.bkt-contact-shapes .tri{width:52px;height:45px;background:#30b665;-webkit-mask:url('/brand/bluekiosktech-triangle-rounded.svg') center/contain no-repeat;mask:url('/brand/bluekiosktech-triangle-rounded.svg') center/contain no-repeat}.bkt-contact-shapes .rect{width:49px;height:36px;border-radius:7px;background:#2aaaf5}.bkt-contact-shapes .circ{width:36px;height:36px;border-radius:50%;background:#ffd84d}
+.bkt-contact-hero-aside ol{margin:0;padding:0;list-style:none;position:relative;z-index:1}
+.bkt-contact-hero-aside li{border-top:1px solid #d9edff32;padding:17px 0;display:flex;align-items:baseline;gap:22px;font-weight:750;line-height:1.4}
+.bkt-contact-hero-aside li span{color:#80cdef;font-size:.75rem;font-weight:850;letter-spacing:.08em}
+.bkt-contact-hero-aside p{color:#c4d9ea;margin:14px 0 0;font-size:.8rem;line-height:1.65}
+.bkt-contact-main{background:linear-gradient(180deg,#fff 0%,#f3f7fb 100%)}
+.bkt-contact-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:30px;align-items:start}
+.bkt-contact-form-card{background:#fff;border:1px solid #dfeaf4;border-radius:12px;padding:clamp(22px,3.5vw,48px);box-shadow:0 16px 45px #10294a0a}
+.bkt-contact-form-card h2,.bkt-contact-sidebar h2{font-size:clamp(1.75rem,2.5vw,2.65rem);line-height:1.16;letter-spacing:-.04em;margin:14px 0}
+.bkt-contact-intro{color:#596f84;margin:0 0 33px}
+.bkt-contact-form-card fieldset{border:0;padding:0;margin:0}
+.bkt-contact-mode legend,.bkt-contact-partner legend{font-weight:800;font-size:1.02rem;color:#12294a;margin-bottom:14px}
+.bkt-contact-mode{display:flex;flex-wrap:wrap;gap:12px 16px;margin-bottom:29px!important}
+.bkt-contact-mode legend{width:100%}
+.bkt-contact-mode label{display:flex;gap:10px;align-items:center;border:1px solid #dce7f0;border-radius:7px;padding:13px 16px;font-size:.9rem;font-weight:650;cursor:pointer}
+.bkt-contact-mode label:has(input:checked){background:#edf7fd;border-color:#3b9bd1;color:#0d4777}
+.bkt-contact-mode input{accent-color:#137cb5;width:17px;height:17px;margin:0}
+.bkt-contact-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.bkt-contact-fields label,.bkt-contact-message{display:flex;flex-direction:column;gap:8px;color:#213c5d;font-weight:750;font-size:.85rem;min-width:0}
+.bkt-contact-wide{grid-column:1/-1}
+.bkt-contact-fields input,.bkt-contact-fields select,.bkt-contact-message textarea{font:inherit;font-weight:450;color:#142c4e;width:100%;min-width:0;border:1px solid #cbd9e7;border-radius:6px;background:#fff;padding:12px 13px;min-height:48px;box-shadow:0 1px 2px #223b5308}
+.bkt-contact-fields input::placeholder,.bkt-contact-message textarea::placeholder{color:#8393a4}
+.bkt-contact-fields input:focus-visible,.bkt-contact-fields select:focus-visible,.bkt-contact-message textarea:focus-visible{outline:3px solid #70c9ee;outline-offset:2px;border-color:#006cba}
+.bkt-contact-partner{padding:28px 0 5px!important;margin:26px 0!important;border-block:1px solid #dce8f1!important}
+.bkt-contact-partner[hidden]{display:none!important}
+.bkt-contact-partner legend{padding-bottom:10px}
+.bkt-contact-message{margin-top:25px}
+.bkt-contact-message textarea{line-height:1.55;resize:vertical;min-height:140px}
+.bkt-contact-consent{display:flex;align-items:flex-start;gap:11px;font-weight:600;font-size:.86rem;line-height:1.55;color:#203d5f;margin-top:27px}
+.bkt-contact-consent input{width:18px;height:18px;flex:none;accent-color:#127fbe;margin-top:3px}
+.bkt-contact-privacy{font-size:.77rem;color:#627991;margin:7px 0 23px 29px}
+.bkt-contact-submit-row{display:flex;gap:15px;align-items:center}
+.bkt-contact-submit-row button{cursor:pointer;max-width:100%}.bkt-contact-submit-row button:disabled{opacity:.55;cursor:wait}
+.bkt-contact-notice{font-size:.88rem;border:1px solid #dae5ef;border-radius:7px;padding:12px 14px;margin-top:18px;line-height:1.6}
+.bkt-contact-notice.is-preview{background:#eff7fd;color:#164b70;border-color:#b6d9f0}.bkt-contact-notice.is-success{background:#effcf5;color:#13683b;border-color:#a6daba}.bkt-contact-notice.is-error{background:#fff5f3;color:#8b3327;border-color:#e7b4ac}
+.bkt-contact-notice[hidden]{display:none}
+.bkt-contact-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.bkt-contact-sidebar{border-radius:12px;background:linear-gradient(145deg,#0c2444,#204e7c);color:#fff;box-shadow:0 17px 44px #143b6229}
+.bkt-contact-sidebar-content{padding:clamp(26px,3vw,39px)}
+.bkt-contact-sidebar h2{color:#fff;margin-block:15px 20px}
+.bkt-contact-sidebar p{color:#cce0f0;font-size:.94rem}
+.bkt-contact-sidebar ul{padding:0;list-style:none;margin:28px 0}.bkt-contact-sidebar li{padding:12px 0;border-top:1px solid #ffffff27;font-size:.88rem;font-weight:750}
+.bkt-contact-sidebar-label{font-size:.75rem!important;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.bkt-contact-sidebar a{color:#9fe1ff;overflow-wrap:anywhere;text-decoration:none;font-weight:750}
+.bkt-contact-sidebar a:hover{text-decoration:underline}
+.bkt-contact-sidebar-note{padding-top:25px;margin-top:25px;border-top:1px solid #ffffff33;font-size:.8rem!important}
+.bkt-contact-back{display:inline-block;margin-top:24px}
+@media(max-width:880px){.bkt-contact-layout{grid-template-columns:1fr}.bkt-contact-hero-grid{grid-template-columns:1fr}.bkt-contact-hero-aside{max-width:670px}}
+@media(max-width:600px){.bkt-contact-fields{grid-template-columns:1fr}.bkt-contact-hero{padding-block:60px}.bkt-contact-form-card{padding:23px 18px}.bkt-contact-mode{display:grid}.bkt-contact-mode label{width:100%}.bkt-contact-hero h1{font-size:clamp(2.25rem,9vw,3.15rem)}.bkt-contact-main{padding-block:55px}.bkt-contact-submit-row button{width:100%}}
+@media(prefers-reduced-motion:reduce){.bkt-contact-hero *{animation:none!important;transition:none!important}}

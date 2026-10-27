@@ -1,0 +1,149 @@
+---
+/**
+ * BlueKioskTech — Header corporatif (étape 1.2).
+ * Rôle : navigation bilingue, état actif, CTA B2B et menu mobile accessible.
+ * Architecture : les URLs et libellés proviennent exclusivement de src/i18n/ui.ts.
+ * Interaction progressive : JS léger, sans bibliothèque ni hydratation React.
+ */
+import Brand from './Brand.astro';
+import { pathFor, translation, type Locale, type RouteId } from '../i18n/ui';
+
+interface Props { locale: Locale; route: RouteId }
+const { locale, route } = Astro.props;
+const t = translation(locale);
+const items: { id: RouteId; label: string }[] = [
+  { id: 'home', label: t.nav.home },
+  { id: 'solutions', label: t.nav.solutions },
+  { id: 'about', label: t.nav.about },
+  { id: 'partners', label: t.nav.partners },
+  { id: 'contact', label: t.nav.contact },
+];
+---
+<header class="site-header" data-site-header>
+  <div class="container header-inner">
+    <a class="header-brand" href={pathFor(locale, 'home')} aria-label="BlueKioskTech"><Brand /></a>
+
+    <nav class="desktop-nav" aria-label={t.nav.navigationLabel}>
+      {items.map(({ id, label }) => (
+        <a href={pathFor(locale, id)} aria-current={route === id ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <nav class="locale-switch" aria-label={t.nav.language}>
+        <a href={pathFor('fr', route)} lang="fr" aria-current={locale === 'fr' ? 'page' : undefined} aria-label="Français">FR</a>
+        <span aria-hidden="true">/</span>
+        <a href={pathFor('en', route)} lang="en" aria-current={locale === 'en' ? 'page' : undefined} aria-label="English">EN</a>
+      </nav>
+      <a class="button button-dark header-cta" href={pathFor(locale, 'partners')}>
+        {t.nav.primary}<span class="header-cta-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <!-- Le menu est masqué sur ordinateur. L'attribut hidden reste le contrôle d'ouverture. -->
+    <button class="menu-toggle" type="button" aria-label={t.nav.mobile} aria-controls="bkt-mobile-navigation" aria-expanded="false" data-menu-toggle data-open-label={t.nav.mobile} data-close-label={t.nav.close}>
+      <span class="toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+
+  <div class="mobile-panel" id="bkt-mobile-navigation" data-mobile-panel hidden>
+    <nav class="mobile-panel-nav" aria-label={t.nav.mobileNavigation}>
+      {items.map(({ id, label }) => (
+        <a href={pathFor(locale, id)} aria-current={route === id ? 'page' : undefined}>{label}<span aria-hidden="true">↗</span></a>
+      ))}
+      <a class="mobile-partner-link" href={pathFor(locale, 'partners')}>{t.nav.primary}<span aria-hidden="true">↗</span></a>
+    </nav>
+    <nav class="mobile-lang" aria-label={t.nav.language}>
+      <a lang="fr" href={pathFor('fr', route)} aria-current={locale === 'fr' ? 'page' : undefined}>Français</a>
+      <a lang="en" href={pathFor('en', route)} aria-current={locale === 'en' ? 'page' : undefined}>English</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 70;
+    background: rgba(255,255,255,.98);
+    border-bottom: 1px solid rgba(14, 43, 76, .09);
+    transition: box-shadow .3s ease, background .3s ease;
+  }
+  @supports (backdrop-filter: blur(16px)) {
+    .site-header { background: rgba(255,255,255,.91); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  }
+  .site-header.is-scrolled { box-shadow: 0 12px 35px rgba(7, 29, 52, .09); }
+  .header-inner { min-height: 86px; display:flex; align-items:center; justify-content:space-between; gap:clamp(15px,1.8vw,30px); transition:min-height .3s ease; }
+  .is-scrolled .header-inner { min-height: 72px; }
+  .header-brand { text-decoration:none; flex:0 0 auto; display:inline-flex; align-items:center; }
+  .desktop-nav { display:flex; align-items:center; justify-content:center; gap:clamp(14px,1.55vw,29px); margin-left:auto; }
+  .desktop-nav a { position:relative; display:inline-flex; align-items:center; min-height:86px; text-decoration:none; font-weight:720; color:#304b69; white-space:nowrap; font-size:.82rem; transition:color .23s ease, min-height .3s ease; }
+  .is-scrolled .desktop-nav a { min-height:72px; }
+  .desktop-nav a::after { content:""; position:absolute; bottom:0; left:0; width:100%; height:3px; border-radius:3px 3px 0 0; transform:scaleX(0); transform-origin:left; background:#087ccd; transition:transform .25s ease; }
+  .desktop-nav a:hover, .desktop-nav a[aria-current="page"] { color:#0064ad; }
+  .desktop-nav a:hover::after,.desktop-nav a[aria-current="page"]::after { transform:scaleX(1); }
+  .header-actions { display:flex; align-items:center; gap:clamp(14px,1.5vw,24px); margin-left:clamp(4px,1vw,20px); }
+  .locale-switch { display:flex; align-items:center; gap:8px; font-size:.76rem; font-weight:800; }
+  .locale-switch a { display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:36px;color:#526780; text-decoration:none; transition:color .2s ease; }
+  .locale-switch a[aria-current="page"],.locale-switch a:hover { color:#0c2545; }
+  .locale-switch span { color:#b1bdc8; }
+  .header-cta { white-space:nowrap; font-size:.80rem; min-height:44px; padding:11px 15px; border-radius:5px; }
+  .header-cta-arrow { transition:transform .25s ease; }
+  .header-cta:hover .header-cta-arrow { transform:translate(3px,-3px); }
+  .menu-toggle { display:none; appearance:none; border:1px solid #d5e0ec; width:46px; height:44px; border-radius:8px; background:#fff; padding:0; cursor:pointer; align-items:center; justify-content:center; }
+  .toggle-bars { display:grid; width:21px; gap:5px; }
+  .toggle-bars span { display:block; height:2px; width:100%; background:#102e51; border-radius:2px; transition:transform .23s ease, opacity .23s ease; }
+  .menu-toggle[aria-expanded="true"] .toggle-bars span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .toggle-bars span:nth-child(2) { opacity:0; }
+  .menu-toggle[aria-expanded="true"] .toggle-bars span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+  .mobile-panel[hidden] { display:none !important; }
+  .mobile-panel { display:none; }
+  @media (max-width:1090px) {
+    .desktop-nav,.header-actions { display:none; }
+    .header-inner,.is-scrolled .header-inner { min-height:73px; }
+    .menu-toggle { display:inline-flex; margin-left:auto; }
+    .mobile-panel { display:block; position:absolute; left:0; right:0; top:100%; padding:16px max(24px, calc((100vw - 1160px)/2)); background:#fff; border-top:1px solid #e7edf3; border-bottom:1px solid #dbe6ef; box-shadow:0 26px 40px rgba(9,35,61,.13); max-height:calc(100dvh - 75px); overflow:auto; }
+    .mobile-panel-nav { display:grid; }
+    .mobile-panel-nav a { display:flex; align-items:center; justify-content:space-between; padding:14px 6px; font-size:1rem; font-weight:700; color:#123357; text-decoration:none; border-bottom:1px solid #e9eef4; }
+    .mobile-panel-nav a[aria-current="page"] { color:#0575c8; }
+    .mobile-panel-nav a span { font-size:.8rem; color:#1684c8; }
+    .mobile-panel-nav .mobile-partner-link { display:flex; margin-top:17px; border-bottom:0; padding:15px 18px; border-radius:6px; background:#0a315f; color:white; }
+    .mobile-panel-nav .mobile-partner-link span { color:white; }
+    .mobile-lang { display:flex; align-items:center; gap:22px; margin-top:18px; padding:14px 6px; }
+    .mobile-lang a { color:#6a7e92; text-decoration:none; font-weight:720; font-size:.88rem; }
+    .mobile-lang a[aria-current="page"] { color:#0a315f; text-decoration:underline; text-underline-offset:6px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,.header-inner,.desktop-nav a,.desktop-nav a::after,.toggle-bars span,.header-cta-arrow { transition:none; }
+  }
+</style>
+
+<script>
+  /** Menu mobile accessible + ombre du header au défilement; JS sans dépendance. */
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = header?.querySelector<HTMLElement>('[data-mobile-panel]');
+
+  if (header && toggle && panel) {
+    const closeMenu = (returnFocus = false) => {
+      toggle.setAttribute('aria-expanded','false');
+      toggle.setAttribute('aria-label',toggle.dataset.openLabel ?? 'Menu');
+      panel.hidden = true;
+      if (returnFocus) toggle.focus();
+    };
+    toggle.addEventListener('click',() => {
+      const opening = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded',String(opening));
+      toggle.setAttribute('aria-label',opening ? (toggle.dataset.closeLabel ?? 'Close') : (toggle.dataset.openLabel ?? 'Menu'));
+      panel.hidden = !opening;
+    });
+    document.addEventListener('keydown',(event) => { if (event.key === 'Escape' && !panel.hidden) closeMenu(true); });
+    document.addEventListener('pointerdown',(event) => {
+      if (!panel.hidden && event.target instanceof Node && !header.contains(event.target)) closeMenu();
+    });
+    window.addEventListener('resize',() => {
+      if (window.innerWidth > 1090 && !panel.hidden) closeMenu();
+    },{passive:true});
+    const updateHeader = () => header.classList.toggle('is-scrolled',window.scrollY > 14);
+    window.addEventListener('scroll',updateHeader,{passive:true});
+    updateHeader();
+  }
+</script>

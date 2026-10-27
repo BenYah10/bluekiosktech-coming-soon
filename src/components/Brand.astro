@@ -1,0 +1,50 @@
+---
+/**
+ * BlueKioskTech — marque corporative (étape 1.2.2).
+ * Rôle : afficher le même logo vectoriel dans le header et le footer.
+ * Source de vérité : public/brand/bluekiosktech-wordmark.svg.
+ * Décision : Blue = vert, Kiosk = bleu, Tech = jaune ; couleurs exactement reprises du symbole et espacement symbole/nom harmonisé.
+ * Aucun texte, police ou ressource externe n'est nécessaire à son rendu.
+ */
+interface Props { compact?: boolean; loading?: "eager" | "lazy"; }
+const { compact = false, loading = "eager" } = Astro.props;
+---
+<span class:list={['brand-mark', { compact }]}>
+  <img
+    class="brand-logo"
+    src="/brand/bluekiosktech-wordmark.svg"
+    alt="BlueKioskTech"
+    width="522"
+    height="64"
+    loading={loading}
+    decoding="async"
+  />
+</span>
+
+  <style>
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    width: 250px;
+    max-width: 100%;
+    line-height: 1;
+    flex: none;
+  }
+
+  .brand-mark.compact {
+    width: 170px;
+  }
+
+  .brand-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 400px) {
+    .brand-mark,
+    .brand-mark.compact {
+      width: 150px;
+    }
+  }
+</style>

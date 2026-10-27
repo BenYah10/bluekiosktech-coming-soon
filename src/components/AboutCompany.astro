@@ -1,0 +1,65 @@
+---
+/**
+ * BlueKioskTech — composant corporatif « À propos », étape 1.4.
+ * Présente l'entreprise et les trois piliers : mission, vision, approche.
+ * Les contenus et les liens sont centralisés dans i18n/ui.ts (FR/EN).
+ * Aucun visuel de machine : la priorité ici est l'identité de l'entreprise.
+ * Styles regroupés dans la feuille dédiée company-about.css, sans effet sur le header.
+ */
+import { pathFor, translation, type Locale } from '../i18n/ui';
+import '../styles/company-about.css';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const data = translation(locale).home.companyAbout;
+---
+<section class="bkt-company section" id="entreprise" aria-labelledby="bkt-company-title">
+  <div class="container bkt-company-layout">
+    <div class="bkt-company-intro">
+      <div class="bkt-company-heading">
+        <span class="eyebrow bkt-company-eyebrow">{data.eyebrow}</span>
+        <h2 id="bkt-company-title">{data.title}</h2>
+        <p class="bkt-company-lead">{data.description}</p>
+        <a class="bkt-company-action" href={pathFor(locale, 'about')}>
+          <span>{data.action}</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+      <div class="bkt-company-visual" aria-hidden="true">
+        <span class="bkt-company-visual-kicker">{data.visualTopline}</span>
+        <div class="bkt-company-visual-geometry">
+          <svg class="bkt-company-geometry" viewBox="0 0 420 160" role="presentation" focusable="false">
+            <!-- Trio officiel : triangle aux trois angles arrondis, rectangle horizontal et cercle. Hauteurs visuelles harmonisées. -->
+            <path d="M71.60 50.40 Q83.00 33.00 94.40 50.40 L128.60 102.60 Q140.00 120.00 117.20 120.00 L48.80 120.00 Q26.00 120.00 37.40 102.60 Z" fill="#30B665" />
+            <rect x="161" y="44" width="107" height="74" rx="12" fill="#2AAAF5" />
+            <circle cx="337" cy="81" r="39" fill="#FFD84D" />
+          </svg>
+        </div>
+        <span class="bkt-company-visual-caption">{data.visualCaption}</span>
+      </div>
+      <p class="bkt-company-progress"><span class="bkt-company-progress-dot" aria-hidden="true"></span>{data.progressLabel}</p>
+    </div>
+
+    <div class="bkt-company-values" role="list">
+      {data.values.map((item, index) => (
+        <article class="bkt-company-value" role="listitem">
+          <div class="bkt-company-value-number" aria-hidden="true">{item.label}</div>
+          <div class="bkt-company-value-copy">
+            <div class="bkt-company-value-heading">
+              <h3>{item.title}</h3>
+              <span class={`bkt-company-value-icon bkt-company-value-icon-${index + 1}`} aria-hidden="true">
+                {index === 0 ? (
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M22 12h-3"/></svg>
+                ) : index === 1 ? (
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.6-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.6 6.5-9.5 6.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3.1"/></svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5h9M4 5l5 5M10 19h10M20 19l-5-5"/><path d="m14 7 3 3 4-5"/></svg>
+                )}
+              </span>
+            </div>
+            <p>{item.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

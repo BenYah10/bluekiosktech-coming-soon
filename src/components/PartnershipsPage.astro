@@ -1,0 +1,157 @@
+---
+/**
+ * BlueKioskTech — page B2B partenariats (Phase 2, lot L3.1).
+ * Parcours : introduction → établissements → valeur → démarche → contact.
+ * Visuels conceptuels validés pour MatMatic et VUCS ; aucune promesse de rendement.
+ * Les liens ouvrent le formulaire de contact avec un projet présélectionné.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { pathFor, translation, type Locale } from '../i18n/ui';
+import { partnershipTranslation } from '../i18n/partnerships';
+import '../styles/partnerships.css';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = partnershipTranslation(locale);
+const shared = translation(locale);
+const email = shared.general.email;
+// Liens de qualification B2B : préselection de la demande sur la page Contact.
+const interestPath = (project: 'matmatic' | 'vucs' | 'other') =>
+  `${pathFor(locale, 'contact')}?type=partner&project=${project}`;
+const links = {
+  matmatic: pathFor(locale, 'matmatic'),
+  vucs: pathFor(locale, 'vucs'),
+  other: pathFor(locale, 'contact'),
+};
+---
+<SiteLayout locale={locale} route="partners" title={t.meta.title} description={t.meta.description}>
+  <section class="bkt-pt-hero" aria-labelledby="bkt-pt-title">
+    <div class="container bkt-pt-hero-grid">
+      <div class="bkt-pt-hero-copy">
+        <span class="eyebrow">{t.hero.eyebrow}</span>
+        <h1 id="bkt-pt-title">{t.hero.title}</h1>
+        <p class="bkt-pt-lead">{t.hero.intro}</p>
+        <div class="bkt-pt-hero-actions">
+          <a class="button button-dark" href="#bkt-pt-contact">{t.hero.primary}<span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href={pathFor(locale,'solutions')}>{t.hero.secondary}<span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="bkt-pt-status"><span aria-hidden="true"></span>{t.hero.status}</p>
+      </div>
+      <div class="bkt-pt-hero-visual" aria-label={t.hero.visualHeading}>
+        <div class="bkt-pt-visual-top"><span>BLUEKIOSKTECH</span><span>{t.hero.visualLabel}</span></div>
+        <!-- Deux visuels conceptuels préalablement approuvés. Chaque vignette ouvre sa page dédiée. -->
+        <div class="bkt-pt-visual-showcase">
+          <a class="bkt-pt-visual-product" href={links.matmatic}>
+            <img src="/visuals/hero/01-matmatic-tunnel.webp" width="1448" height="1086" alt={t.hero.matmaticImageAlt} loading="eager" decoding="async" />
+            <span>{t.hero.matmaticLabel}<span aria-hidden="true"> ↗</span></span>
+          </a>
+          <a class="bkt-pt-visual-product" href={links.vucs}>
+            <img src="/visuals/vucs/01-vucs-gym-hero.webp" width="1448" height="1086" alt={t.hero.vucsImageAlt} loading="eager" decoding="async" />
+            <span>{t.hero.vucsLabel}<span aria-hidden="true"> ↗</span></span>
+          </a>
+        </div>
+        <p class="bkt-pt-visual-heading">{t.hero.visualHeading}</p>
+        <p class="bkt-pt-visual-subheading">{t.hero.visualSubtitle}</p>
+        <span class="bkt-pt-visual-footer">{t.hero.note}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bkt-pt-section bkt-pt-audiences" aria-labelledby="bkt-pt-audiences-title">
+    <div class="container">
+      <header class="bkt-pt-heading">
+        <span class="eyebrow">{t.audiences.eyebrow}</span>
+        <h2 id="bkt-pt-audiences-title">{t.audiences.title}</h2>
+        <p>{t.audiences.intro}</p>
+      </header>
+      <div class="bkt-pt-audience-grid">
+        {t.audiences.items.map((item) => (
+          <article class:list={['bkt-pt-audience-card', `bkt-pt-audience-card--${item.key}`]}>
+            <div class="bkt-pt-card-top"><span class="bkt-pt-number">{item.number} / 03</span><span class="bkt-pt-card-status">{item.status}</span></div>
+            <!-- Médias adaptés au concept ; symbole conservé pour les collaborations futures. -->
+            {item.key === 'matmatic' ? (
+  <div class="bkt-pt-card-media">
+    <img
+      src="/visuals/matmatic/matmatic-prototype-lime.webp"
+      width="1100"
+      height="825"
+      alt={t.audiences.matmaticImageAlt}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+) : item.key === 'vucs' ? (
+  <div class="bkt-pt-card-media">
+    <img
+      src="/visuals/vucs/04-vucs-gym-card.webp"
+      width="1448"
+      height="1086"
+      alt={t.audiences.vucsImageAlt}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+) : (
+  <div class="bkt-pt-card-media">
+    <img
+      src="/visuals/partnerships/03-other-business-handshake.webp"
+      width="1448"
+      height="1086"
+      alt={t.audiences.otherImageAlt}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+)}
+            <p class="bkt-pt-category">{item.category}</p>
+            <h3>{item.name}</h3>
+            <p class="bkt-pt-card-description">{item.detail}</p>
+            <a class="bkt-pt-card-link" href={links[item.key]}>{item.action}<span aria-hidden="true">↗</span></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bkt-pt-section bkt-pt-value" aria-labelledby="bkt-pt-value-title">
+    <div class="container bkt-pt-value-grid">
+      <header class="bkt-pt-heading">
+        <span class="eyebrow">{t.value.eyebrow}</span>
+        <h2 id="bkt-pt-value-title">{t.value.title}</h2>
+        <p>{t.value.intro}</p>
+      </header>
+      <div class="bkt-pt-value-list">
+        {t.value.items.map((item, i) => <article class="bkt-pt-value-item"><span class="bkt-pt-value-index">{String(i+1).padStart(2,'0')}</span><div><h3>{item.title}</h3><p>{item.body}</p></div></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="bkt-pt-section bkt-pt-process" aria-labelledby="bkt-pt-process-title">
+    <div class="container">
+      <header class="bkt-pt-heading">
+        <span class="eyebrow">{t.process.eyebrow}</span>
+        <h2 id="bkt-pt-process-title">{t.process.title}</h2>
+      </header>
+      <ol class="bkt-pt-process-grid">
+        {t.process.steps.map((step, i) => <li><span class="bkt-pt-process-num">{String(i+1).padStart(2,'0')}</span><h3>{step.title}</h3><p>{step.body}</p></li>)}
+      </ol>
+      <p class="bkt-pt-disclaimer">{t.process.disclaimer}</p>
+    </div>
+  </section>
+
+  <section id="bkt-pt-contact" class="bkt-pt-contact" aria-labelledby="bkt-pt-contact-title">
+    <div class="container bkt-pt-contact-grid">
+      <div>
+        <span class="eyebrow eyebrow-light">{t.contact.eyebrow}</span>
+        <h2 id="bkt-pt-contact-title">{t.contact.title}</h2>
+        <p>{t.contact.intro}</p>
+        <p class="bkt-pt-email">{email}</p>
+      </div>
+      <div class="bkt-pt-contact-actions">
+        <a class="button button-accent" href={interestPath('matmatic')}>{t.contact.stationAction} <span aria-hidden="true">↗</span></a>
+        <a class="button bkt-pt-contact-alt" href={interestPath('vucs')}>{t.contact.fitnessAction} <span aria-hidden="true">↗</span></a>
+        <div class="bkt-pt-contact-secondary"><a href={interestPath('other')}>{t.contact.generalAction} ↗</a><a href={pathFor(locale, 'contact')}>{t.contact.alternative} ↗</a></div>
+        <p class="bkt-pt-contact-note">{t.contact.method}</p>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

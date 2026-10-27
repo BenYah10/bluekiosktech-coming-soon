@@ -1,0 +1,342 @@
+---
+/**
+ * BlueKioskTech — ContactPage.astro
+ * - Un formulaire général et un parcours de qualification B2B, communs aux deux langues.
+ * - Préselection possible via /contact/?type=partner&project=matmatic|vucs|other.
+ * - Étape 1.8.3 : protection Cloudflare Turnstile et fonction Vercel /api/contact.
+ * - Plus aucun appel direct à EmailJS depuis le navigateur.
+ * - La fonction serveur décide seule du destinataire et de la disponibilité de l'envoi.
+ * - Jamais de clé privée dans le navigateur ; les secrets restent sur Vercel.
+ * Les contenus proviennent de src/i18n/contact.ts, pas de textes dupliqués.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { pathFor, translation, type Locale } from '../i18n/ui';
+import { contactTranslation } from '../i18n/contact';
+import '../styles/contact.css';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = contactTranslation(locale);
+const shared = translation(locale);
+const mailto = `mailto:${shared.general.email}`;
+// PUBLIC_ = clé publique Turnstile seulement. La clé secrète reste sur Vercel.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || '';
+---
+<SiteLayout locale={locale} route="contact" title={t.meta.title} description={t.meta.description}>
+  <section class="bkt-contact-hero" aria-labelledby="bkt-contact-title">
+    <div class="container bkt-contact-hero-grid">
+      <div>
+        <span class="eyebrow">{t.hero.eyebrow}</span>
+        <h1 id="bkt-contact-title">{t.hero.title}</h1>
+        <p class="bkt-contact-lead">{t.hero.intro}</p>
+        <span class="bkt-contact-pill"><span aria-hidden="true"></span>{t.hero.pill}</span>
+      </div>
+      <aside class="bkt-contact-hero-aside" aria-label={t.aside.title}>
+        <div class="bkt-contact-shapes" aria-hidden="true"><span class="tri"></span><span class="rect"></span><span class="circ"></span></div>
+        <ol>
+          <li><span>01</span>{t.hero.step1}</li>
+          <li><span>02</span>{t.hero.step2}</li>
+          <li><span>03</span>{t.hero.step3}</li>
+        </ol>
+        <p>{t.hero.note}</p>
+      </aside>
+    </div>
+  </section>
+  <section class="bkt-contact-main section" aria-label={t.form.title}>
+    <div class="container bkt-contact-layout">
+      <div class="bkt-contact-form-card">
+        <span class="eyebrow">{t.form.eyebrow}</span>
+        <h2>{t.form.title}</h2>
+        <p class="bkt-contact-intro">{t.form.intro}</p>
+        <div class="bkt-contact-delivery-card" role="status" aria-live="polite" tabindex="-1" data-delivery-card hidden>
+          <div class="bkt-contact-delivery-icon" aria-hidden="true">✓</div>
+          <div>
+            <h3 data-delivery-title></h3>
+            <p data-delivery-description></p>
+            <p class="bkt-contact-ack-line" data-delivery-ack></p>
+          </div>
+        </div>
+        <form id="bkt-contact-form" data-contact-form data-locale={locale}
+          data-preview-success={t.form.previewSuccess} data-send-success={t.form.success}
+          data-send-error={t.form.error} data-config-error={t.form.configError}
+          data-validation-error={t.form.validationError} data-sending-label={t.form.sending}
+          data-submit-label={t.form.submit} data-preview-label={t.form.preview}
+          method="post">
+          <fieldset class="bkt-contact-mode">
+            <legend>{t.form.modeLegend}</legend>
+            <label><input type="radio" name="mode" value="general" checked />{t.form.modeGeneral}</label>
+            <label><input type="radio" name="mode" value="partner" />{t.form.modePartner}</label>
+          </fieldset>
+          <div class="bkt-contact-fields">
+            <label>{t.form.name}<input name="name" type="text" autocomplete="name" placeholder={t.form.namePlaceholder} maxlength="100" required /></label>
+            <label>{t.form.email}<input name="email" type="email" autocomplete="email" placeholder={t.form.emailPlaceholder} maxlength="180" required /></label>
+            <label class="bkt-contact-wide">{t.form.phone}<input name="phone" type="tel" autocomplete="tel" placeholder={t.form.phonePlaceholder} maxlength="40" /></label>
+          </div>
+          <fieldset class="bkt-contact-partner" data-partner-fields hidden disabled>
+            <legend>{t.form.partnerLegend}</legend>
+            <div class="bkt-contact-fields">
+              <label>{t.form.organization}<input name="organization" type="text" autocomplete="organization" placeholder={t.form.organizationPlaceholder} maxlength="140" data-partner-required /></label>
+              <label>{t.form.role}<input name="role" type="text" autocomplete="organization-title" placeholder={t.form.rolePlaceholder} maxlength="90" /></label>
+              <label>{t.form.city}<input name="city" type="text" autocomplete="address-level2" placeholder={t.form.cityPlaceholder} maxlength="120" data-partner-required /></label>
+              <label>{t.form.type}<select name="businessType" data-partner-required>
+                  <option value="">{t.form.typePlaceholder}</option>
+                  {Object.entries(t.form.types).map(([value, label]) => <option value={value}>{label}</option>)}
+                </select></label>
+              <label>{t.form.project}<select name="project" data-partner-required>
+                  <option value="">{t.form.projectPlaceholder}</option>
+                  {Object.entries(t.form.projects).map(([value, label]) => <option value={value}>{label}</option>)}
+                </select></label>
+              <label>{t.form.sites}<select name="sites">
+                  <option value="">{t.form.sitesPlaceholder}</option>
+                  {Object.entries(t.form.siteOptions).map(([value, label]) => <option value={value}>{label}</option>)}
+                </select></label>
+              <label class="bkt-contact-wide">{t.form.goal}<select name="goal" data-partner-required>
+                  <option value="">{t.form.goalPlaceholder}</option>
+                  {Object.entries(t.form.goals).map(([value, label]) => <option value={value}>{label}</option>)}
+                </select></label>
+            </div>
+          </fieldset>
+          <label class="bkt-contact-message">{t.form.message}
+            <textarea name="message" rows="5" minlength="10" maxlength="2000" required placeholder={t.form.messagePlaceholder}></textarea>
+          </label>
+          <label class="bkt-contact-consent"><input name="consent" type="checkbox" required /><span>{t.form.privacy}</span></label>
+          <p class="bkt-contact-privacy">{t.form.privacyNote}</p>
+          <div class="bkt-contact-honeypot" aria-hidden="true"><label>{t.form.leaveBlank}<input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
+          <input type="hidden" name="locale" value={locale} />
+          <input type="hidden" name="startedAt" value="" />
+          {turnstileSiteKey && (
+            <div class="bkt-turnstile-container">
+              <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="bkt_contact" data-theme="light" data-size="flexible"></div>
+              <p>{locale === 'fr' ? 'Vérification anti-robot avant l’envoi.' : 'Anti-bot verification before sending.'}</p>
+            </div>
+          )}
+          <div class="bkt-contact-submit-row">
+            <button type="submit" class="button button-dark" data-submit-button>{t.form.submit}<span aria-hidden="true">↗</span></button>
+          </div>
+          <p class="bkt-contact-notice" tabindex="-1" role="status" aria-live="polite" data-contact-status hidden></p>
+        </form>
+      </div>
+      <aside class="bkt-contact-sidebar">
+        <div class="bkt-contact-sidebar-content">
+          <span class="eyebrow eyebrow-light">{t.aside.eyebrow}</span>
+          <h2>{t.aside.title}</h2>
+          <p>{t.aside.intro}</p>
+          <ul>
+            <li>{t.aside.general}</li><li>{t.aside.matmatic}</li><li>{t.aside.vucs}</li>
+          </ul>
+          <p class="bkt-contact-sidebar-label">{t.aside.emailLabel}</p>
+          <a href={mailto}>{shared.general.email}</a>
+          <p class="bkt-contact-sidebar-note">{t.aside.transparency}</p>
+          <a class="bkt-contact-back" href={pathFor(locale, 'partners')}>← {shared.nav.partners}</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</SiteLayout>
+
+<script>
+  /**
+   * BlueKioskTech.ca — client sécurisé, version 1.8.3 (préproduction).
+   * Tous les appels d'envoi passent par /api/contact ; le navigateur ne connaît
+   * ni clé privée ni identifiant EmailJS. Turnstile est revalidé côté serveur.
+   * Conserve les libellés FR/EN existants via le dictionnaire contact.ts.
+   */
+  import { contactTranslation } from '../i18n/contact';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const partnerFields = form.querySelector<HTMLFieldSetElement>('[data-partner-fields]');
+    const submitButton = form.querySelector<HTMLButtonElement>('[data-submit-button]');
+    const notice = form.querySelector<HTMLElement>('[data-contact-status]');
+    const deliveryCard = document.querySelector<HTMLElement>('[data-delivery-card]');
+    const deliveryTitle = document.querySelector<HTMLElement>('[data-delivery-title]');
+    const deliveryDescription = document.querySelector<HTMLElement>('[data-delivery-description]');
+    const deliveryAck = document.querySelector<HTMLElement>('[data-delivery-ack]');
+    const modes = form.querySelectorAll<HTMLInputElement>('input[name="mode"]');
+    const required = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-partner-required]');
+    const field = <T extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(name: string) =>
+      form.querySelector<T>(`[name="${name}"]`);
+    const locale = form.dataset.locale === 'en' ? 'en' : 'fr';
+    const copy = contactTranslation(locale).form;
+    const readMode = () => form.querySelector<HTMLInputElement>('input[name="mode"]:checked')?.value || 'general';
+    const securityWidget = form.querySelector<HTMLElement>('.cf-turnstile');
+    const submitLabel = form.dataset.submitLabel || copy.submit;
+    const previewLabel = form.dataset.previewLabel || copy.preview;
+    const setButtonLabel = (value: string) => {
+      const text = submitButton?.firstChild;
+      if (text && text.nodeType === Node.TEXT_NODE) text.textContent = value;
+    };
+    setButtonLabel(securityWidget ? submitLabel : previewLabel);
+    const show = (kind: 'is-error' | 'is-success' | 'is-preview', message: string) => {
+      if (!notice) return;
+      notice.hidden = false;
+      notice.className = `bkt-contact-notice ${kind}`;
+      notice.textContent = message;
+      notice.focus();
+    };
+    const setMode = () => {
+      const isPartner = readMode() === 'partner';
+      if (partnerFields) {
+        partnerFields.hidden = !isPartner;
+        partnerFields.disabled = !isPartner;
+      }
+      required.forEach((f) => f.required = isPartner);
+      if (notice) { notice.hidden = true; notice.textContent = ''; }
+    };
+    modes.forEach((mode) => mode.addEventListener('change', setMode));
+    const params = new URLSearchParams(window.location.search);
+    const preset = params.get('project');
+    if (params.get('type') === 'partner' || ['matmatic', 'vucs', 'other'].includes(preset || '')) {
+      const p = form.querySelector<HTMLInputElement>('input[name="mode"][value="partner"]');
+      if (p) p.checked = true;
+    }
+    setMode();
+    if (preset && ['matmatic', 'vucs', 'other'].includes(preset)) {
+      const project = field<HTMLSelectElement>('project');
+      const type = field<HTMLSelectElement>('businessType');
+      if (project) project.value = preset;
+      if (type && preset === 'matmatic') type.value = 'gas_station';
+      if (type && preset === 'vucs') type.value = 'fitness_centre';
+    }
+    const startedAt = field<HTMLInputElement>('startedAt');
+    if (startedAt) startedAt.value = String(Date.now());
+
+    const resetChallenge = () => {
+      const w = window as Window & { turnstile?: { reset: () => void } };
+      w.turnstile?.reset();
+    };
+    const showDelivery = (title: string, acknowledged: boolean) => {
+      if (!deliveryCard || !deliveryTitle || !deliveryDescription || !deliveryAck) return;
+      deliveryTitle.textContent = locale === 'fr' ? 'Demande transmise' : 'Inquiry submitted';
+      deliveryDescription.textContent = locale === 'fr'
+        ? `Votre demande « ${title} » a été acceptée par le service d’envoi. Notre équipe va l’examiner.`
+        : `Your inquiry “${title}” was accepted by the email service. Our team will review it.`;
+      deliveryAck.textContent = acknowledged
+        ? (locale === 'fr'
+          ? 'Un accusé de réception a été accepté pour envoi à votre adresse courriel.'
+          : 'An acknowledgment email was accepted for sending to your email address.')
+        : (locale === 'fr'
+          ? 'L’accusé par courriel n’a pas pu être envoyé. Votre demande principale reste transmise.'
+          : 'The acknowledgment email could not be sent. Your primary inquiry was still submitted.');
+      deliveryCard.hidden = false;
+      deliveryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      deliveryCard.focus({ preventScroll: true });
+    };
+    let lastAttempt = 0;
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!submitButton || !form.reportValidity()) return;
+      // Le honeypot et le délai côté client complètent les protections serveur.
+      if (field<HTMLInputElement>('website')?.value.trim()) return;
+      if (!securityWidget) {
+        show('is-preview', locale === 'fr'
+          ? 'Envoi désactivé : la clé publique Turnstile n’est pas configurée.'
+          : 'Sending disabled: Turnstile public site key is not configured.');
+        return;
+      }
+      if (Date.now() - lastAttempt < 10000) {
+        show('is-error', locale === 'fr'
+          ? 'Veuillez patienter quelques secondes avant de réessayer.'
+          : 'Please wait a few seconds before trying again.');
+        return;
+      }
+      const token = field<HTMLInputElement>('cf-turnstile-response')?.value || '';
+      if (!token) {
+        show('is-error', locale === 'fr'
+          ? 'Veuillez compléter la vérification anti-robot avant l’envoi.'
+          : 'Please complete the anti-bot verification before submitting.');
+        return;
+      }
+      const get = (name: string) => field<HTMLInputElement | HTMLTextAreaElement>(name)?.value.trim() || '';
+      const mode = readMode();
+      const project = mode === 'partner' ? (field<HTMLSelectElement>('project')?.value || '') : '';
+      const title = mode === 'general'
+        ? (locale === 'fr' ? 'Contact général' : 'General inquiry')
+        : project === 'matmatic' ? (locale === 'fr' ? 'Partenariat MatMatic' : 'MatMatic partnership')
+        : project === 'vucs' ? (locale === 'fr' ? 'Partenariat VUCS' : 'VUCS partnership')
+        : (locale === 'fr' ? 'Autre partenariat' : 'Other partnership');
+      const payload = {
+        mode, locale, name: get('name'), email: get('email'), phone: get('phone'),
+        organization: mode === 'partner' ? get('organization') : '',
+        role: mode === 'partner' ? get('role') : '',
+        city: mode === 'partner' ? get('city') : '',
+        project, businessType: mode === 'partner' ? (field<HTMLSelectElement>('businessType')?.value || '') : '',
+        sites: mode === 'partner' ? (field<HTMLSelectElement>('sites')?.value || '') : '',
+        goal: mode === 'partner' ? (field<HTMLSelectElement>('goal')?.value || '') : '',
+        message: get('message'), consent: field<HTMLInputElement>('consent')?.checked === true,
+        website: get('website'), turnstileToken: token,
+      };
+      lastAttempt = Date.now();
+      if (deliveryCard) deliveryCard.hidden = true;
+      submitButton.disabled = true;
+      setButtonLabel(form.dataset.sendingLabel || copy.sending);
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 28000);
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload), signal: controller.signal,
+        });
+        const result = await response.json().catch(() => null);
+        if (response.ok && result?.ok === true) {
+          form.reset();
+          setMode();
+          if (startedAt) startedAt.value = String(Date.now());
+          showDelivery(title, result.acknowledgment === true);
+        } else if (response.status === 429) {
+          show('is-error', locale === 'fr'
+            ? 'Trop de demandes rapprochées. Réessayez ultérieurement ou écrivez-nous à info@bluekiosk.tech.'
+            : 'Too many requests. Please try again later or email info@bluekiosk.tech.');
+        } else if (response.status === 503) {
+          show('is-error', locale === 'fr'
+            ? 'Le formulaire est temporairement indisponible. Contactez-nous à info@bluekiosk.tech.'
+            : 'The form is temporarily unavailable. Please email info@bluekiosk.tech.');
+        } else {
+          show('is-error', form.dataset.sendError || copy.error);
+        }
+      } catch {
+        show('is-error', locale === 'fr'
+          ? 'L’envoi n’a pas pu être confirmé. Avant de réessayer, vérifiez vos courriels ou écrivez à info@bluekiosk.tech.'
+          : 'Sending could not be confirmed. Before trying again, check your email or contact info@bluekiosk.tech.');
+      } finally {
+        window.clearTimeout(timeout);
+        resetChallenge();
+        submitButton.disabled = false;
+        setButtonLabel(submitLabel);
+      }
+    });
+  }
+</script>
+
+
+<style>
+  /* Confirmation visible après transmission du formulaire; locale au composant. */
+  .bkt-contact-delivery-card[hidden] { display:none!important; }
+  .bkt-contact-delivery-card {
+    display:flex; align-items:flex-start; gap:16px;
+    margin:20px 0 26px; padding:20px;
+    background:#edf8f2; border:1px solid #9ed6b8;
+    border-left:5px solid #30b665; border-radius:12px;
+    box-shadow:0 12px 30px rgba(12,42,51,.05);
+  }
+  .bkt-contact-delivery-icon {
+    display:flex;align-items:center;justify-content:center;
+    flex:0 0 36px;height:36px;border-radius:50%;
+    background:#30b665;color:#fff;font-weight:800;font-size:20px;
+  }
+  .bkt-contact-delivery-card h3 { margin:0 0 8px;color:#132c50;font-size:clamp(1.1rem,2.1vw,1.4rem); }
+  .bkt-contact-delivery-card p { margin:0 0 8px;color:#244559;line-height:1.55;overflow-wrap:anywhere; }
+  .bkt-contact-delivery-card .bkt-contact-ack-line {margin:0;color:#416678;font-size:.92rem;}
+  @media(max-width:420px) {
+    .bkt-contact-delivery-card {padding:15px;gap:10px;}
+    .bkt-contact-delivery-icon {flex-basis:30px;height:30px;font-size:17px;}
+  }
+</style>
+
+<style>
+  .bkt-turnstile-container { margin: 18px 0; max-width: 100%; }
+  .bkt-turnstile-container p { margin: 7px 0; font-size: .84rem; color: #416678; }
+  .bkt-turnstile-container iframe { max-width: 100%; }
+</style>
