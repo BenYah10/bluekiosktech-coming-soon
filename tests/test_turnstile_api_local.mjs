@@ -25,9 +25,9 @@ Object.assign(process.env, {
   EMAILJS_PUBLIC_KEY: 'test-public-key',
   EMAILJS_CONTACT_TEMPLATE_ID: 'test-contact-template',
   EMAILJS_ACK_TEMPLATE_ID: 'test-ack-template',
+  EMAILJS_PRIVATE_KEY: 'test-private-key-not-for-production',
   CONTACT_RATE_SALT: 'test-salt-not-for-production',
 });
-delete process.env.EMAILJS_PRIVATE_KEY;
 
 const nativeFetch = globalThis.fetch;
 const interceptedEmailCalls = [];
@@ -50,7 +50,7 @@ globalThis.fetch = async (input, init) => {
     assert.ok(['example.com', 'localhost'].includes(verdict.hostname),
       `Hostname de test inattendu: ${verdict.hostname}`);
     testHostAdapted = verdict.hostname === 'example.com';
-    return new Response(JSON.stringify({ ...verdict, hostname: 'localhost' }), {
+    return new Response(JSON.stringify({ ...verdict, hostname: 'localhost', action: 'bkt_contact' }), {
       status: actualResponse.status,
       headers: { 'content-type': 'application/json' },
     });

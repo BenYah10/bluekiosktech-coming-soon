@@ -60,6 +60,11 @@ export const matmaticContent = {
       title: 'Voir le concept en situation.',
       text: 'Une vidéo de présentation est en préparation pour illustrer le parcours envisagé. Elle sera identifiée comme une simulation conceptuelle tant qu’aucune démonstration réelle n’aura été validée.',
       status: 'Vidéo conceptuelle en préparation',
+      readyText: 'Découvrez en images le parcours d’utilisation imaginé pour MatMatic, depuis la recherche d’une borne jusqu’à la récupération du tapis. Cette vidéo est une mise en scène conceptuelle, et non un essai réel de la machine.',
+      simulationNotice: 'Vidéo conceptuelle — fonctionnement et résultats à valider',
+      playerLabel: 'Présentation vidéo conceptuelle du service MatMatic',
+      videoCaption: 'Simulation conceptuelle MatMatic — visuels et fonctionnalités non définitifs',
+      unsupported: 'Votre navigateur ne permet pas de lire cette vidéo.',
       imageAlt: 'Autre perspective conceptuelle de MatMatic face à un tunnel de lavage automatique.',
     },
     pilot: {
@@ -126,6 +131,11 @@ export const matmaticContent = {
       title: 'Picture the concept in action.',
       text: 'A presentation video is being developed to illustrate the intended experience. It will be clearly described as a concept simulation until a real-world demonstration has been validated.',
       status: 'Concept video in preparation',
+      readyText: 'Watch a visual concept of the intended MatMatic customer journey, from finding a kiosk to retrieving a floor mat. This is a conceptual dramatization, not a recording of a working machine.',
+      simulationNotice: 'Concept video — operation and results subject to validation',
+      playerLabel: 'MatMatic conceptual service presentation video',
+      videoCaption: 'MatMatic concept simulation — visuals and features are not final',
+      unsupported: 'Your browser cannot play this video.',
       imageAlt: 'Alternative concept view of a MatMatic unit in front of an automatic car wash tunnel.',
     },
     pilot: {

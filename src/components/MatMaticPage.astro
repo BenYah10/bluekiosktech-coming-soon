@@ -10,12 +10,21 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import { pathFor, type Locale } from '../i18n/ui';
 import { matmaticTranslation } from '../i18n/matmatic';
 import '../styles/matmatic-page.css';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = matmaticTranslation(locale);
 const partnersUrl = pathFor(locale, 'partners');
 const solutionsUrl = pathFor(locale, 'solutions');
+
+// L6.2 final : vidéo optimisée 1080p H.264/AAC, poster 16:9 tiré du visuel validé.
+// En l’absence du MP4, conserve la présentation conceptuelle existante.
+const videoDir = join(process.cwd(), 'public', 'videos', 'matmatic');
+const hasConceptVideo = existsSync(join(videoDir, 'matmatic-presentation.mp4'));
+const hasCaptionsFR = existsSync(join(videoDir, 'matmatic-presentation.fr.vtt'));
+const hasCaptionsEN = existsSync(join(videoDir, 'matmatic-presentation.en.vtt'));
 ---
 <SiteLayout locale={locale} route="matmatic" title={t.metaTitle} description={t.metaDescription}>
   <!-- 01 — Hero : promesse approuvée, explicitement associée à un concept en développement. -->
@@ -93,18 +102,41 @@ const solutionsUrl = pathFor(locale, 'solutions');
     </div>
   </section>
 
-  <!-- 05 — Réservation visuelle pour la vidéo (aucune vidéo non approuvée intégrée). -->
+  <!-- 05 — Vidéo conceptuelle approuvée ; lecture volontaire, responsive 16:9, jamais une démonstration réelle. -->
   <section class="mm-section mm-video" id="mm-video" aria-labelledby="mm-video-title">
     <div class="container mm-video-layout">
       <div class="mm-video-copy">
         <span class="eyebrow">{t.video.eyebrow}</span>
         <h2 id="mm-video-title">{t.video.title}</h2>
-        <p class="mm-section-lead">{t.video.text}</p>
-        <div class="mm-video-status"><span aria-hidden="true">◷</span>{t.video.status}</div>
+        <p class="mm-section-lead">{hasConceptVideo ? t.video.readyText : t.video.text}</p>
+        <div class="mm-video-status" role="note"><span aria-hidden="true">{hasConceptVideo ? 'ⓘ' : '◷'}</span>{hasConceptVideo ? t.video.simulationNotice : t.video.status}</div>
       </div>
-      <figure class="mm-video-figure">
-        <img src="/visuals/hero/03-matmatic-tunnel-autre-angle.webp" alt={t.video.imageAlt} loading="lazy" decoding="async" width="1448" height="1086" />
-        <figcaption>{t.imageBadge}</figcaption>
+      <figure class={hasConceptVideo ? 'mm-video-figure mm-video-figure--active' : 'mm-video-figure'}>
+        {hasConceptVideo ? (
+          <video
+            class="mm-concept-player"
+            controls
+            controlsList="nodownload"
+            playsinline
+            preload="none"
+            poster="/videos/matmatic/matmatic-poster.jpg"
+            width="1920"
+            height="1080"
+            aria-label={t.video.playerLabel}
+          >
+            <source src="/videos/matmatic/matmatic-presentation.mp4" type="video/mp4" />
+            {hasCaptionsFR && (
+              <track kind="captions" src="/videos/matmatic/matmatic-presentation.fr.vtt" srclang="fr" label="Français" default={locale === 'fr'} />
+            )}
+            {hasCaptionsEN && (
+              <track kind="captions" src="/videos/matmatic/matmatic-presentation.en.vtt" srclang="en" label="English" default={locale === 'en'} />
+            )}
+            {t.video.unsupported}
+          </video>
+        ) : (
+          <img src="/visuals/hero/03-matmatic-tunnel-autre-angle.webp" alt={t.video.imageAlt} loading="lazy" decoding="async" width="1448" height="1086" />
+        )}
+        <figcaption>{hasConceptVideo ? t.video.videoCaption : t.imageBadge}</figcaption>
       </figure>
     </div>
   </section>
@@ -124,3 +156,24 @@ const solutionsUrl = pathFor(locale, 'solutions');
   </section>
   <div class="container mm-back"><a class="section-link" href={solutionsUrl}>← {t.back}</a></div>
 </SiteLayout>
+
+<!-- L6.2b — Retour à l’affiche MatMatic après la lecture.
+     La propriété controlsList masque le téléchargement dans les navigateurs compatibles.
+     Cette protection d’interface n’empêche pas l’accès technique au MP4 dans le navigateur. -->
+<script>
+  const matmaticVideo = document.querySelector<HTMLVideoElement>('.mm-concept-player');
+
+  if (matmaticVideo) {
+    // À la fin, recharge l'état initial : affiche poster, compteur à zéro,
+    // sans rejouer automatiquement ni déclencher un nouveau chargement complet.
+    matmaticVideo.addEventListener('ended', () => {
+      matmaticVideo.pause();
+      matmaticVideo.load();
+    });
+
+    // Masque le menu contextuel natif « Enregistrer la vidéo sous... ».
+    matmaticVideo.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
+  }
+</script>

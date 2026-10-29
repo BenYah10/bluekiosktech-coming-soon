@@ -90,3 +90,25 @@
 @media(prefers-reduced-motion:reduce){
   .mm-actions .button {transition:none;}
 }
+
+/* L6.2 — Lecteur MatMatic : conserve la largeur, l'arrondi et le cadrage mobile.
+ * Lecture manuelle, poster existant et contrôles natifs accessibles.
+ */
+.mm-concept-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #071c35;
+}
+.mm-video-figure--active figcaption {
+  position: static;
+  display: block;
+  padding: 11px 14px;
+  background: #e8f2f8;
+  color: #174b72;
+  font-size: .78rem;
+  line-height: 1.45;
+  border-radius: 0;
+}
