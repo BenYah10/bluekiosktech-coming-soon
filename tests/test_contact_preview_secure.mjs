@@ -21,6 +21,7 @@ const baseline = {
   EMAILJS_CONTACT_TEMPLATE_ID: 'DEMO_ONLY',
   EMAILJS_ACK_TEMPLATE_ID: 'DEMO_ONLY',
   CONTACT_RATE_SALT: 'DEMO_ONLY',
+  CONTACT_PREVIEW_TEST_EMAIL: 'test-preview@example.com',
 };
 Object.assign(process.env, baseline);
 let reportedHostname = preview;
@@ -32,7 +33,14 @@ globalThis.fetch = async (url) => {
   fetchCalls++;
   if (String(url).includes('turnstile')) {
     turnstileCalls++;
-    return new Response(JSON.stringify({ success: true, hostname: reportedHostname }), { status: 200 });
+    return new Response(
+  JSON.stringify({
+    success: true,
+    hostname: reportedHostname,
+    action: 'bkt_contact',
+  }),
+  { status: 200 }
+);
   }
   if (String(url).includes('emailjs')) {
     emailCalls++;
@@ -47,7 +55,7 @@ const request = (origin, body = {}) => new Request('https://test.invalid/api/con
   headers: { 'origin': origin, 'content-type': 'application/json' },
   body: JSON.stringify({
     mode: 'general', locale: 'fr',
-    name: 'Client Test', email: `test${++sequence}@example.test`,
+    name: 'Client Test', email: 'test-preview@example.com',
     message: 'Ce test est purement fictif et sans envoi reel.',
     consent: true, website: '', turnstileToken: 'TOKEN_FICTIF', ...body,
   }),
@@ -90,6 +98,31 @@ try {
   assert.equal(a.body.code, 'challenge_invalid');
   assert.equal(emailCalls, 2);
   logs.push('OK: reponse demo example.com refusee, zero appel EmailJS supplementaire');
+  // Staging : autorise uniquement dans l'environnement Preview.
+  const staging = 'staging.bluekiosktech.ca';
+
+  reportedHostname = staging;
+  const emailsBeforeStaging = emailCalls;
+  a = await post(`https://${staging}`);
+
+  assert.equal(a.status, 200);
+  assert.deepEqual(a.body, { ok: true, acknowledgment: true });
+  assert.equal(emailCalls, emailsBeforeStaging + 2);
+  logs.push('OK: Staging accepte en Preview, deux emails simules');
+
+  // Production : Staging doit etre refuse avant tout appel externe.
+  process.env.VERCEL_ENV = 'production';
+  const callsBeforeProduction = fetchCalls;
+  const emailsBeforeProduction = emailCalls;
+
+  a = await post(`https://${staging}`);
+
+  assert.equal(a.status, 403);
+  assert.equal(a.body.code, 'origin');
+  assert.equal(fetchCalls, callsBeforeProduction);
+  assert.equal(emailCalls, emailsBeforeProduction);
+  logs.push('OK: Staging refuse en Production, aucun appel externe');
+
 
   process.env.VERCEL_ENV = 'production';
   reportedHostname = preview;
@@ -104,7 +137,7 @@ try {
   assert.equal(a.status, 403);
   logs.push('OK: un nom de projet Vercel etranger est refuse');
 
-  assert.equal(turnstileCalls, 2);
+  assert.equal(turnstileCalls, 3);
   console.log(logs.join('\n'));
   console.log('TESTS LOCAUX REUSSIS — AUCUN COURRIEL REEL ENVOYE.');
 } catch(e) {

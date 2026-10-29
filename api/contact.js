@@ -74,6 +74,14 @@ function originHostname(request) {
   const origin = request.headers.get('origin') || '';
   if (origin === 'https://bluekiosktech.ca') return 'bluekiosktech.ca';
   if (origin === 'https://www.bluekiosktech.ca') return 'www.bluekiosktech.ca';
+  // Préproduction permanente : autorisée uniquement sur Vercel Preview.
+  // La comparaison exacte empêche d'accepter des domaines similaires.
+  if (
+    process.env.VERCEL_ENV === 'preview' &&
+    origin === 'https://staging.bluekiosktech.ca'
+  ) {
+    return 'staging.bluekiosktech.ca';
+  }
   if (process.env.CONTACT_ALLOW_LOCAL_TESTS === 'true' &&
     /^http:\/\/(?:localhost|127\.0\.0\.1):\d+$/.test(origin)) {
     return new URL(origin).hostname;
