@@ -1,0 +1,38 @@
+/*
+ * BlueKioskTech — styles des cartes projets (correctif 1.3.1).
+ * Feuille CSS chargée explicitement par ProjectCard.astro sur toutes les routes.
+ * Classes bkt-* spécifiques pour éviter les collisions avec le header et la bannière.
+ * Ne contient aucun style de logo, d'en-tête ou de pied de page.
+ */
+/* Carte industrielle premium : priorité à la lisibilité et à la clarté du stade de développement. */
+  .bkt-project-card { display:flex;flex-direction:column;min-width:0;border-radius:15px;overflow:hidden;background:#fff;border:1px solid #dce6ef;box-shadow:0 10px 27px rgba(13,42,71,.065);transition:transform .38s cubic-bezier(.2,.8,.2,1),box-shadow .38s cubic-bezier(.2,.8,.2,1); }
+  .bkt-project-card:hover,.bkt-project-card:focus-within { transform:translateY(-5px);box-shadow:0 22px 50px rgba(13,42,71,.14); }
+  .bkt-card-media { height:278px;display:grid;place-items:center;position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(122deg,#dcecf5 0%,#96bfd8 48%,#37688d 100%); }
+  .bkt-project-card--vucs .bkt-card-media { background:linear-gradient(122deg,#e6f4f7 0%,#afdbe5 45%,#39869d 100%); }
+  .bkt-media-grid { position:absolute;inset:0;z-index:-1;opacity:.24;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to top,black,transparent 90%); }
+  .bkt-media-glow { position:absolute;width:380px;height:380px;border-radius:50%;right:-90px;top:-200px;z-index:-1;background:#ffffff42;filter:blur(20px); }
+  .bkt-product-illustration { display:block;width:min(94%,540px);height:100%;filter:drop-shadow(0 21px 19px #041e3240);transition:transform .65s cubic-bezier(.2,.8,.2,1); }
+  .bkt-project-card:hover .bkt-product-illustration,.bkt-project-card:focus-within .bkt-product-illustration { transform:scale(1.035); }
+  .bkt-concept-note { position:absolute;right:16px;bottom:15px;border:1px solid #ffffff6b;background:rgba(8,31,53,.66);backdrop-filter:blur(8px);color:#fff;font-size:.70rem;font-weight:700;padding:7px 10px;border-radius:4px; }
+  .bkt-card-body { padding:clamp(22px,2.8vw,31px);display:flex;flex-direction:column;align-items:stretch;flex:1; }
+  .bkt-card-overline { display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:17px; }
+  .bkt-card-category { text-transform:uppercase;letter-spacing:.16em;color:#35709d;font-size:.69rem;font-weight:850; }
+  .bkt-card-status { display:inline-flex;align-items:center;gap:7px;background:#f6f8eb;border:1px solid #e5e7b6;color:#5d5a12;padding:6px 10px;border-radius:100px;font-size:.68rem;line-height:1.25;font-weight:800; }
+  .bkt-project-card--vucs .bkt-card-status { color:#245e4a;background:#eef9f1;border-color:#c7e9d4; }
+  .bkt-status-dot { width:6px;height:6px;flex:none;background:#bc9819;border-radius:50%; }
+  .bkt-project-card--vucs .bkt-status-dot { background:#309e67; }
+  h3 { margin:0;color:#102a49;font-size:clamp(1.7rem,2.8vw,2.15rem);letter-spacing:-.046em;line-height:1.12; }
+  .bkt-card-subtitle { margin:7px 0 0;color:#173d62;font-size:1rem;font-weight:750;line-height:1.4; }
+  .bkt-card-description { margin:13px 0 26px;color:#526a7d;font-size:.92rem;line-height:1.66; }
+  .bkt-card-cta { border-top:1px solid #e7edf3;padding-top:17px;margin-top:auto;text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:16px;color:#075e9d;font-size:.9rem;font-weight:800; }
+  .bkt-cta-circle { width:38px;height:38px;display:inline-grid;place-items:center;border:1px solid #d4e3ee;border-radius:50%;font-size:1.13rem;transition:color .25s ease,background .25s ease,transform .25s ease; }
+  .bkt-card-cta:hover .bkt-cta-circle,.bkt-card-cta:focus-visible .bkt-cta-circle { color:white;background:#0c4476;transform:translate(2px,-2px); }
+  @media(max-width:640px) { .bkt-card-media { height:240px; }.bkt-card-body { padding:22px; } }
+  @media(prefers-reduced-motion:reduce) { .bkt-project-card,.bkt-product-illustration,.bkt-cta-circle { transition:none; }.bkt-project-card:hover,.bkt-project-card:focus-within,.bkt-project-card:hover .bkt-product-illustration,.bkt-project-card:focus-within .bkt-product-illustration { transform:none; } }
+
+/* Lot L2.3 — remplace les SVG par les deux visuels approuvés, sans recadrage agressif. */
+.bkt-card-product-photo { display:block;width:100%;height:100%;object-fit:contain;object-position:center;transition:transform .65s cubic-bezier(.2,.8,.2,1); }
+.bkt-project-card--matmatic .bkt-card-media { background:linear-gradient(145deg,#e8edf1,#f1f7f7); }
+.bkt-project-card--vucs .bkt-card-media { background:linear-gradient(145deg,#e9f4f6,#cbdfe6); }
+.bkt-project-card:hover .bkt-card-product-photo,.bkt-project-card:focus-within .bkt-card-product-photo { transform:scale(1.025); }
+@media(prefers-reduced-motion:reduce){.bkt-card-product-photo{transition:none;}.bkt-project-card:hover .bkt-card-product-photo,.bkt-project-card:focus-within .bkt-card-product-photo{transform:none;}}

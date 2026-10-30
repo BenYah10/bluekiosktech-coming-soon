@@ -1,0 +1,179 @@
+---
+/**
+ * BlueKioskTech — page Solutions MatMatic, lot L2.2.
+ * Rôle : vitrine conceptuelle B2B et parcours d'usage proposé, en six sections.
+ * Architecture : SiteLayout/Header/Footer et routes existantes préservés ;
+ * textes FR/EN centralisés dans i18n/matmatic.ts ; styles isolés dans matmatic-page.css.
+ * Aucun script, formulaire ou traitement API n'est modifié.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { pathFor, type Locale } from '../i18n/ui';
+import { matmaticTranslation } from '../i18n/matmatic';
+import '../styles/matmatic-page.css';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = matmaticTranslation(locale);
+const partnersUrl = pathFor(locale, 'partners');
+const solutionsUrl = pathFor(locale, 'solutions');
+
+// L6.2 final : vidéo optimisée 1080p H.264/AAC, poster 16:9 tiré du visuel validé.
+// En l’absence du MP4, conserve la présentation conceptuelle existante.
+const videoDir = join(process.cwd(), 'public', 'videos', 'matmatic');
+const hasConceptVideo = existsSync(join(videoDir, 'matmatic-presentation.mp4'));
+const hasCaptionsFR = existsSync(join(videoDir, 'matmatic-presentation.fr.vtt'));
+const hasCaptionsEN = existsSync(join(videoDir, 'matmatic-presentation.en.vtt'));
+---
+<SiteLayout locale={locale} route="matmatic" title={t.metaTitle} description={t.metaDescription}>
+  <!-- 01 — Hero : promesse approuvée, explicitement associée à un concept en développement. -->
+  <section class="mm-hero" aria-labelledby="mm-title">
+    <div class="container mm-hero-layout">
+      <div class="mm-hero-copy">
+        <span class="eyebrow mm-eyebrow">{t.hero.eyebrow}</span>
+        <span class="mm-status"><span class="mm-status-dot" aria-hidden="true"></span>{t.conceptBadge}</span>
+        <h1 id="mm-title">{t.hero.title}</h1>
+        <p class="mm-hero-subtitle">{t.hero.subtitle}</p>
+        <p class="mm-hero-detail">{t.hero.detail}</p>
+        <div class="mm-actions">
+          <a class="button button-dark" href={partnersUrl}>{t.hero.primaryAction}<span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href="#mm-discovery">{t.hero.secondaryAction}<span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="mm-stage"><span aria-hidden="true">◉</span>{t.hero.stage}</p>
+      </div>
+      <figure class="mm-hero-figure">
+        <img src="/visuals/hero/01-matmatic-tunnel.webp" alt={t.hero.imageAlt} width="1448" height="1086" fetchpriority="high" decoding="async" />
+        <figcaption><span class="mm-image-note">{t.imageBadge}</span><span>{t.hero.imageCaption}</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 02 — Concept : prototype d'illustration, non machine commercialisée. -->
+  <section class="mm-section mm-discovery" id="mm-discovery" aria-labelledby="mm-discovery-title">
+    <div class="container mm-discovery-layout">
+      <figure class="mm-product-figure">
+        <img src="/visuals/matmatic/matmatic-prototype-lime.webp" alt={t.discovery.prototypeAlt} width="1100" height="825" loading="lazy" decoding="async" />
+        <figcaption>{t.discovery.prototypeCaption}</figcaption>
+      </figure>
+      <div class="mm-discovery-content">
+        <span class="eyebrow">{t.discovery.eyebrow}</span>
+        <h2 id="mm-discovery-title">{t.discovery.title}</h2>
+        <p class="mm-section-lead">{t.discovery.intro}</p>
+        <ul class="mm-feature-list">
+          {t.discovery.tags.map(item => (
+            <li><span class="mm-feature-marker" aria-hidden="true">✓</span><div><strong>{item.title}</strong><p>{item.body}</p></div></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — Parcours cible : ne pas le présenter comme une démonstration homologuée. -->
+  <section class="mm-section mm-steps" id="mm-steps" aria-labelledby="mm-steps-title">
+    <div class="container">
+      <div class="mm-section-heading mm-center">
+        <span class="eyebrow">{t.steps.eyebrow}</span>
+        <h2 id="mm-steps-title">{t.steps.title}</h2>
+        <p class="mm-section-lead">{t.steps.intro}</p>
+      </div>
+      <ol class="mm-step-grid">
+        {t.steps.items.map(item => (
+          <li class="mm-step-card"><span class="mm-step-num">{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></li>
+        ))}
+      </ol>
+      <p class="mm-steps-note">{t.steps.note}</p>
+    </div>
+  </section>
+
+  <!-- 04 — Arguments B2B, sans revenus fictifs ni partenariats acquis. -->
+  <section class="mm-section mm-benefits" id="mm-benefits" aria-labelledby="mm-benefits-title">
+    <div class="container">
+      <div class="mm-section-heading">
+        <span class="eyebrow">{t.benefits.eyebrow}</span>
+        <h2 id="mm-benefits-title">{t.benefits.title}</h2>
+        <p class="mm-section-lead">{t.benefits.intro}</p>
+      </div>
+      <div class="mm-benefits-grid">
+        {t.benefits.items.map(item => (
+          <article class="mm-benefit-card"><span class="mm-benefit-index">{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — Vidéo conceptuelle approuvée ; lecture volontaire, responsive 16:9, jamais une démonstration réelle. -->
+  <section class="mm-section mm-video" id="mm-video" aria-labelledby="mm-video-title">
+    <div class="container mm-video-layout">
+      <div class="mm-video-copy">
+        <span class="eyebrow">{t.video.eyebrow}</span>
+        <h2 id="mm-video-title">{t.video.title}</h2>
+        <p class="mm-section-lead">{hasConceptVideo ? t.video.readyText : t.video.text}</p>
+        <div class="mm-video-status" role="note"><span aria-hidden="true">{hasConceptVideo ? 'ⓘ' : '◷'}</span>{hasConceptVideo ? t.video.simulationNotice : t.video.status}</div>
+      </div>
+      <figure class={hasConceptVideo ? 'mm-video-figure mm-video-figure--active' : 'mm-video-figure'}>
+        {hasConceptVideo ? (
+          <video
+            class="mm-concept-player"
+            controls
+            controlsList="nodownload"
+            playsinline
+            preload="none"
+            poster="/videos/matmatic/matmatic-poster.jpg"
+            width="1920"
+            height="1080"
+            aria-label={t.video.playerLabel}
+          >
+            <source src="/videos/matmatic/matmatic-presentation.mp4" type="video/mp4" />
+            {hasCaptionsFR && (
+              <track kind="captions" src="/videos/matmatic/matmatic-presentation.fr.vtt" srclang="fr" label="Français" default={locale === 'fr'} />
+            )}
+            {hasCaptionsEN && (
+              <track kind="captions" src="/videos/matmatic/matmatic-presentation.en.vtt" srclang="en" label="English" default={locale === 'en'} />
+            )}
+            {t.video.unsupported}
+          </video>
+        ) : (
+          <img src="/visuals/hero/03-matmatic-tunnel-autre-angle.webp" alt={t.video.imageAlt} loading="lazy" decoding="async" width="1448" height="1086" />
+        )}
+        <figcaption>{hasConceptVideo ? t.video.videoCaption : t.imageBadge}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 06 — Projet pilote : CTA vers les partenariats existants et jamais vers l'API directe. -->
+  <section class="mm-pilot" id="mm-pilot" aria-labelledby="mm-pilot-title">
+    <div class="container mm-pilot-content">
+      <span class="eyebrow eyebrow-light">{t.pilot.eyebrow}</span>
+      <h2 id="mm-pilot-title">{t.pilot.title}</h2>
+      <p>{t.pilot.text}</p>
+      <div class="mm-actions">
+        <a class="button button-accent" href={partnersUrl}>{t.pilot.action}<span aria-hidden="true">↗</span></a>
+        <a class="button mm-button-on-dark" href={solutionsUrl}>{t.pilot.secondaryAction}<span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="mm-pilot-note">{t.pilot.label}</p>
+    </div>
+  </section>
+  <div class="container mm-back"><a class="section-link" href={solutionsUrl}>← {t.back}</a></div>
+</SiteLayout>
+
+<!-- L6.2b — Retour à l’affiche MatMatic après la lecture.
+     La propriété controlsList masque le téléchargement dans les navigateurs compatibles.
+     Cette protection d’interface n’empêche pas l’accès technique au MP4 dans le navigateur. -->
+<script>
+  const matmaticVideo = document.querySelector<HTMLVideoElement>('.mm-concept-player');
+
+  if (matmaticVideo) {
+    // À la fin, recharge l'état initial : affiche poster, compteur à zéro,
+    // sans rejouer automatiquement ni déclencher un nouveau chargement complet.
+    matmaticVideo.addEventListener('ended', () => {
+      matmaticVideo.pause();
+      matmaticVideo.load();
+    });
+
+    // Masque le menu contextuel natif « Enregistrer la vidéo sous... ».
+    matmaticVideo.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
+  }
+</script>

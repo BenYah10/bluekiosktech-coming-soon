@@ -1,0 +1,149 @@
+---
+/**
+ * Layout commun BlueKioskTech FR/EN — SEO L5.
+ * Canonical/hreflang par route, cartes Open Graph/Twitter et données structurées.
+ * La langue suit les routes Astro. Ne touche ni aux formulaires ni au rendu des pages.
+ */
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { pathFor, translation, type Locale, type RouteId } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  route: RouteId;
+  title?: string;
+  description?: string;
+}
+const { locale, route, title, description } = Astro.props;
+const t = translation(locale);
+const pageTitle = title ? `${title} | BlueKioskTech` : t.metadata.title;
+const pageDescription = description ?? t.metadata.description;
+const canonical = new URL(pathFor(locale, route), Astro.site).toString();
+const alternativeFr = new URL(pathFor('fr', route), Astro.site).toString();
+const alternativeEn = new URL(pathFor('en', route), Astro.site).toString();
+
+// Les trois aperçus utilisent les visuels conceptuels déjà approuvés.
+// Une seule image par projet évite des extraits incohérents sur les réseaux sociaux.
+const socialImages: Record<RouteId, { file: string; fr: string; en: string }> = {
+  home: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'Concepts MatMatic et VUCS, développés par BlueKioskTech.',
+    en: 'MatMatic and VUCS concepts developed by BlueKioskTech.',
+  },
+  solutions: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'MatMatic près d’un lave-auto et VUCS dans un centre sportif : visuels conceptuels.',
+    en: 'Concept visuals of MatMatic at a car wash and VUCS in a fitness centre.',
+  },
+  matmatic: {
+    file: '/seo/matmatic-station-lavage.jpg',
+    fr: 'Machine conceptuelle MatMatic verte à proximité d’un tunnel de lavage automobile.',
+    en: 'Green MatMatic concept machine beside an automatic car wash.',
+  },
+  vucs: {
+    file: '/seo/vucs-centre-sportif.jpg',
+    fr: 'Borne conceptuelle VUCS noire et dorée dans un centre sportif.',
+    en: 'Black-and-gold VUCS concept kiosk inside a fitness centre.',
+  },
+  about: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'Deux projets BlueKioskTech : MatMatic et VUCS, en développement.',
+    en: 'Two BlueKioskTech projects in development: MatMatic and VUCS.',
+  },
+  partners: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'Deux concepts de services en libre-service pour des partenariats potentiels.',
+    en: 'Two self-service concepts for prospective partnerships.',
+  },
+  contact: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'BlueKioskTech développe les concepts MatMatic et VUCS.',
+    en: 'BlueKioskTech is developing MatMatic and VUCS.',
+  },
+};
+const social = socialImages[route];
+const socialUrl = new URL(social.file, Astro.site).toString();
+const socialAlt = social[locale];
+const socialLocale = locale === 'fr' ? 'fr_CA' : 'en_CA';
+const alternateSocialLocale = locale === 'fr' ? 'en_CA' : 'fr_CA';
+const langTag = locale === 'fr' ? 'fr-CA' : 'en-CA';
+const siteRoot = new URL('/', Astro.site).toString();
+
+// Graphe descriptif sans revendication de certification, ventes ou sites installés.
+// Organization ici désigne la marque/l'équipe, sans préjuger de son incorporation.
+const organization = {
+  '@type': 'Organization',
+  '@id': `${siteRoot}#organization`,
+  name: 'BlueKioskTech',
+  url: siteRoot,
+  logo: new URL('/brand/bluekiosktech-wordmark.svg', Astro.site).toString(),
+  description: 'Développement de concepts de services automatisés en libre-service pour l’hygiène et le nettoyage.',
+};
+const website = {
+  '@type': 'WebSite',
+  '@id': `${siteRoot}#website`,
+  url: siteRoot,
+  name: 'BlueKioskTech',
+  inLanguage: ['fr-CA', 'en-CA'],
+  publisher: { '@id': organization['@id'] },
+};
+const webpage = {
+  '@type': 'WebPage',
+  '@id': `${canonical}#webpage`,
+  url: canonical,
+  name: pageTitle,
+  description: pageDescription,
+  inLanguage: langTag,
+  isPartOf: { '@id': website['@id'] },
+};
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': route === 'home' ? [organization, website, webpage] : [webpage],
+};
+// Protège la balise JSON-LD contre une éventuelle séquence de fermeture de script.
+const jsonLdString = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#0c2545" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr-CA" href={alternativeFr} />
+    <link rel="alternate" hreflang="en-CA" href={alternativeEn} />
+    <link rel="alternate" hreflang="x-default" href={alternativeFr} />
+    <!-- Favicon de marque, avec solution de repli pour les navigateurs anciens. -->
+    <link rel="icon" type="image/png" href="/brand/bluekiosktech-favicon.png?v=rounded-1" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/brand/bluekiosktech-symbol.svg?v=rounded-1" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BlueKioskTech" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={socialLocale} />
+    <meta property="og:locale:alternate" content={alternateSocialLocale} />
+    <meta property="og:image" content={socialUrl} />
+    <meta property="og:image:secure_url" content={socialUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={socialUrl} />
+    <meta name="twitter:image:alt" content={socialAlt} />
+    <script type="application/ld+json" is:inline set:html={jsonLdString}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{locale === 'fr' ? 'Aller au contenu' : 'Skip to content'}</a>
+    <Header locale={locale} route={route} />
+    <main id="main"><slot /></main>
+    <Footer locale={locale} />
+  </body>
+</html>

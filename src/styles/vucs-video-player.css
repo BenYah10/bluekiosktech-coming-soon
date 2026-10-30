@@ -1,0 +1,53 @@
+/*
+ * BlueKioskTech — L6.7 — Vidéo VUCS au format 16:9 natif.
+ * Cadre identique à MatMatic, aucune coupe et aucun zoom du MP4.
+ * Mise en page FR/EN existante conservée ; aucun code de formulaire modifié.
+ */
+.vucs-video .vucs-video-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(30px, 5vw, 78px);
+}
+
+.vucs-video .vucs-video-figure--active {
+  display: block;
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  overflow: hidden;
+  border-radius: 13px;
+  background: #071c35;
+}
+
+.vucs-video .vucs-concept-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  object-position: center;
+  background: #071c35;
+  border-radius: 0;
+}
+
+.vucs-video .vucs-video-figure--active figcaption {
+  display: block;
+  position: static;
+  margin: 0;
+  padding: 11px 14px;
+  background: #e8f2f8;
+  color: #174b72;
+  font-size: .78rem;
+  line-height: 1.45;
+  border-radius: 0;
+}
+
+@media (max-width: 780px) {
+  .vucs-video .vucs-video-layout {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}

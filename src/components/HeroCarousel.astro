@@ -1,0 +1,233 @@
+---
+/**
+ * BlueKioskTech — carrousel du Hero, Phase 2 / lot L2.1.
+ * Quatre images conceptuelles sélectionnées : MatMatic (x2) et VUCS (x2).
+ * Respecte i18n FR/EN, responsive, pause manuelle et réduction des animations.
+ * Images optimisées par Astro depuis src/assets/hero, avec 3 largeurs.
+ * Indépendant des formulaires, de l’API et des services externes.
+ */
+import { Image } from 'astro:assets';
+import { translation, type Locale } from '../i18n/ui';
+import matmaticHero1 from '../assets/hero/01-matmatic-tunnel.webp';
+import vucsHero1 from '../assets/hero/02-vucs-gym.webp';
+import matmaticHero2 from '../assets/hero/03-matmatic-tunnel-autre-angle.webp';
+import vucsHero2 from '../assets/hero/04-vucs-gym-fontaine.webp';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = translation(locale).home;
+const slides = [
+  { src: matmaticHero1, ...t.heroSlides.matmaticPrimary },
+  { src: vucsHero1, ...t.heroSlides.vucsPrimary },
+  { src: matmaticHero2, ...t.heroSlides.matmaticSecondary },
+  { src: vucsHero2, ...t.heroSlides.vucsSecondary },
+];
+---
+<div class="hero-media-wrap" data-hero-carousel>
+  <div class="hero-media hero-carousel-viewport"
+       id="home-hero-carousel-images" role="region"
+       aria-roledescription={t.heroCarouselRole} aria-label={t.heroCarouselLabel} aria-live="off">
+    {slides.map((slide, index) => (
+      <div class="hero-carousel-slide" data-hero-slide data-active={index === 0 ? 'true' : 'false'}
+           aria-hidden={index === 0 ? 'false' : 'true'}>
+        <Image src={slide.src}
+               widths={[640, 960, 1448]}
+               sizes="(max-width: 780px) calc(100vw - 48px), (max-width: 1160px) 48vw, 550px"
+               width={1448} height={1086} alt={slide.alt}
+               loading={index === 0 ? 'eager' : 'lazy'} decoding="async"
+               fetchpriority={index === 0 ? 'high' : 'low'} />
+      </div>
+    ))}
+    <div class="hero-media-shade" aria-hidden="true"></div>
+    <div class="hero-media-corner" aria-hidden="true"></div>
+    <span class="hero-media-note">{t.heroImageNote}</span>
+  </div>
+
+  <!-- Les commandes apparaissent uniquement après initialisation JavaScript. -->
+  <div class="hero-track hero-carousel-controls" role="group" aria-label={t.heroCarouselControlsLabel}>
+    {slides.map((slide, index) => (
+      <button type="button" class="hero-carousel-indicator" data-hero-go={index}
+              data-active={index === 0 ? 'true' : 'false'} aria-pressed={index === 0 ? 'true' : 'false'}
+              aria-controls="home-hero-carousel-images"
+              aria-label={`${t.heroCarouselShowSlide} ${index + 1}/${slides.length} : ${slide.name}`}>
+        <span class="hero-carousel-bar" aria-hidden="true"></span>
+      </button>
+    ))}
+    <button type="button" class="hero-carousel-pause" data-hero-pause
+            data-pause-label={t.heroCarouselPause} data-play-label={t.heroCarouselPlay}
+            aria-label={t.heroCarouselPause} aria-controls="home-hero-carousel-images">
+      <span data-hero-pause-icon aria-hidden="true">Ⅱ</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  /* Fondu enchaîné progressif entre images, sans mouvement du cadre du Hero. */
+  .hero-carousel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.4s ease-in-out, visibility 0s linear 1.4s;
+  }
+  .hero-carousel-slide[data-active="true"] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1.4s ease-in-out;
+  }
+  .hero-carousel-slide img {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Remplace les anciennes barres décoratives par 4 commandes réelles. */
+  .hero-carousel-controls { display: none; align-items: center; gap: 2px; }
+  [data-hero-carousel][data-enhanced="true"] .hero-carousel-controls { display: flex; }
+  .hero-carousel-indicator {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    border: 0;
+    padding: 10px 4px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .hero-carousel-bar {
+    display: block;
+    height: 4px;
+    width: 23px;
+    border-radius: 4px;
+    background: #b2c6d7;
+    transition: width .25s ease, background .25s ease;
+  }
+  .hero-carousel-indicator[data-active="true"] { min-width: 52px; }
+  .hero-carousel-indicator[data-active="true"] .hero-carousel-bar {
+    width: 42px;
+    background: #138acc;
+  }
+  .hero-carousel-pause {
+    margin-left: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid #bdcfde;
+    border-radius: 6px;
+    background: #fff;
+    color: #0c3155;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .hero-carousel-controls button:focus-visible {
+    outline: 3px solid #007ac1;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-carousel-slide, .hero-carousel-bar { transition: none; }
+  }
+</style>
+
+<script>
+  /** Rotation à 5 s ; fondu sur 1,4 s ; arrêt au survol/focus, onglet masqué ou sur demande. */
+  const SLIDE_DURATION_MS = 5000;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const carousel of document.querySelectorAll<HTMLElement>('[data-hero-carousel]')) {
+    const slides = Array.from(carousel.querySelectorAll<HTMLElement>('[data-hero-slide]'));
+    const controls = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-hero-go]'));
+    const pause = carousel.querySelector<HTMLButtonElement>('[data-hero-pause]');
+    const icon = pause?.querySelector<HTMLElement>('[data-hero-pause-icon]');
+    if (!pause || !icon || !slides.length || slides.length !== controls.length) continue;
+
+    let active = 0;
+    let manuallyPaused = motion.matches;
+    let hovering = false;
+    let keyboardFocus = false;
+    let timer: number | undefined;
+
+    const stop = () => {
+      if (timer !== undefined) window.clearInterval(timer);
+      timer = undefined;
+    };
+    const activate = (next: number) => {
+      active = next;
+      slides.forEach((slide, index) => {
+        const selected = index === active;
+        slide.dataset.active = String(selected);
+        slide.setAttribute('aria-hidden', String(!selected));
+      });
+      controls.forEach((button, index) => {
+        const selected = index === active;
+        button.dataset.active = String(selected);
+        button.setAttribute('aria-pressed', String(selected));
+      });
+    };
+    const updatePauseButton = () => {
+      pause.setAttribute('aria-label', manuallyPaused ? pause.dataset.playLabel! : pause.dataset.pauseLabel!);
+      icon.textContent = manuallyPaused ? '▶' : 'Ⅱ';
+    };
+    const start = () => {
+      stop();
+      if (manuallyPaused || motion.matches || hovering || keyboardFocus || document.hidden) return;
+      timer = window.setInterval(() => activate((active + 1) % slides.length), SLIDE_DURATION_MS);
+    };
+
+    controls.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        activate(index);
+        start();
+      });
+    });
+    pause.addEventListener('click', () => {
+      manuallyPaused = !manuallyPaused;
+      updatePauseButton();
+      start();
+    });
+    carousel.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      hovering = true;
+      stop();
+    });
+    carousel.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      hovering = false;
+      start();
+    });
+    carousel.addEventListener('focusin', () => {
+      keyboardFocus = true;
+      stop();
+    });
+    carousel.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && carousel.contains(event.relatedTarget)) return;
+      keyboardFocus = false;
+      start();
+    });
+    document.addEventListener('visibilitychange', start);
+    motion.addEventListener('change', () => {
+      manuallyPaused = motion.matches;
+      updatePauseButton();
+      start();
+    });
+
+    // Les autres médias sont volontairement différés jusqu'au chargement initial.
+    // On les prépare ensuite pour conserver les fondus de 5 s sans surcharge initiale.
+    const warmRemainingImages = () => {
+      slides.slice(1).forEach((slide) => {
+        const image = slide.querySelector<HTMLImageElement>('img');
+        if (image) image.loading = 'eager';
+      });
+    };
+    if (document.readyState === 'complete') warmRemainingImages();
+    else window.addEventListener('load', warmRemainingImages, { once: true });
+
+    carousel.dataset.enhanced = 'true';
+    activate(0);
+    updatePauseButton();
+    start();
+  }
+</script>

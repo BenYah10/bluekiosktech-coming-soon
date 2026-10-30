@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="symbol-title">
+  <title id="symbol-title">BlueKioskTech — symbole</title>
+  <!-- Icône harmonisée : 3 formes de hauteur comparable ; rectangle plus large que haut. -->
+  <path d="M19.40 56.40 Q23 50 26.60 56.40 L37.40 75.60 Q41 82 33.80 82 L12.20 82 Q5 82 8.60 75.60 Z" fill="#30B665"/>
+  <rect x="47" y="53" width="37" height="28" rx="5" fill="#2AAAF5"/>
+  <circle cx="105" cy="67" r="16" fill="#FFD84D"/>
+</svg>

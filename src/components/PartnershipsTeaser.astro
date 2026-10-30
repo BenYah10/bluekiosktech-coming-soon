@@ -1,0 +1,30 @@
+---
+/**
+ * BlueKioskTech — CTA corporatif Partenariats sur la page d'accueil (1.5).
+ * Ne mentionne aucune exclusivité, rémunération ou implantation acquise.
+ * La page complète partage la même source de traduction FR/EN.
+ */
+import { pathFor, type Locale } from '../i18n/ui';
+import { partnershipTranslation } from '../i18n/partnerships';
+import '../styles/partnerships.css';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = partnershipTranslation(locale).teaser;
+---
+<section class="bkt-pt-teaser" aria-labelledby="bkt-pt-teaser-title">
+  <div class="container bkt-pt-teaser-grid">
+    <div class="bkt-pt-teaser-copy">
+      <span class="eyebrow eyebrow-light">{t.eyebrow}</span>
+      <h2 id="bkt-pt-teaser-title">{t.headline}</h2>
+      <p>{t.intro}</p>
+      <a class="button button-accent" href={pathFor(locale, 'partners')}>{t.action}<span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="bkt-pt-teaser-aside">
+      <div class="bkt-pt-teaser-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+      <ul class="bkt-pt-teaser-tags">
+        {t.tags.map((tag, i) => <li><span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>{tag}</li>)}
+      </ul>
+      <p class="bkt-pt-teaser-note">{t.subline}</p>
+    </div>
+  </div>
+</section>

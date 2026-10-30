@@ -1,0 +1,82 @@
+/*
+ * BlueKioskTech — page À propos / About (Phase 2, L3.2).
+ * Préfixe bkt-about- : aucune modification des styles du header, des cartes ou du logo.
+ * Mise en page fluide, identité vectorielle conservée au Hero, médias conceptuels des projets, animation légère, contraste accessible.
+ */
+.bkt-about-hero { isolation:isolate; position:relative; overflow:hidden; background:linear-gradient(115deg,#fff 5%,#f2f8fc 100%); border-bottom:1px solid #e0e9f1; }
+.bkt-about-hero::before { content:"";position:absolute;pointer-events:none;inset:-300px auto auto -340px;width:780px;height:780px;background:radial-gradient(circle,#deeffacc,transparent 67%);z-index:-1; }
+.bkt-about-hero-grid { display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(38px,6vw,100px);align-items:center;padding-block:clamp(82px,8.5vw,135px); }
+.bkt-about-hero-copy { min-width:0;animation:bkt-about-rise .72s both ease-out; }
+.bkt-about-eyebrow { display:inline-flex;align-items:center;gap:12px; }
+.bkt-about-eyebrow::before { content:"";height:2px;width:26px;background:#2aaaf5;flex:none; }
+.bkt-about-hero h1 { color:#10294a;font-size:clamp(2.65rem,4.45vw,4.6rem);letter-spacing:-.052em;line-height:1.07;text-wrap:balance;margin:22px 0 24px; }
+.bkt-about-lead { color:#4f6680;font-size:clamp(1.06rem,1.35vw,1.19rem);line-height:1.72;max-width:630px;margin:0; }
+.bkt-about-hero-actions { display:flex;flex-wrap:wrap;gap:12px;margin-top:32px; }
+.bkt-about-hero-actions .button { gap:14px; }
+.bkt-about-hero-location { color:#627c90;display:flex;align-items:center;gap:10px;margin:38px 0 0;font-size:.81rem; }
+.bkt-about-hero-location span { display:block;height:7px;width:7px;border-radius:50%;background:#30b665;flex:none; }
+.bkt-about-hero-visual { position:relative;min-height:435px;overflow:hidden;border-radius:16px;background:linear-gradient(135deg,#092744,#103f6e 78%,#12629b);color:white;box-shadow:0 26px 65px #123a5c2e;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(27px,3.3vw,42px);animation:bkt-about-rise .78s .12s both ease-out; }
+.bkt-about-hero-visual::before { content:"";position:absolute;width:460px;height:460px;border:1px solid #ffffff2a;border-radius:50%;right:-145px;top:-190px;box-shadow:0 0 0 52px #ffffff08,0 0 0 120px #ffffff05;pointer-events:none; }
+.bkt-about-hero-visual::after { content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 50%,#7fc8f211);pointer-events:none; }
+.bkt-about-visual-eyebrow,.bkt-about-visual-footer { z-index:1;position:relative;text-transform:uppercase;font-weight:770;letter-spacing:.19em;color:#b5d9ef;font-size:.69rem; }
+.bkt-about-symbols { width:100%;position:relative;z-index:1;padding-block:30px 18px; }
+.bkt-about-symbols svg { display:block;width:min(100%,360px);height:auto;margin-inline:auto;filter:drop-shadow(0 10px 18px #0013273a); }
+.bkt-about-visual-title { position:relative;z-index:1;color:#fff;font-size:clamp(1.6rem,2.2vw,2.3rem);line-height:1.2;font-weight:780;letter-spacing:-.034em;margin:0 0 35px;max-width:420px; }
+.bkt-about-identity { background:#fff; }
+.bkt-about-identity-grid { display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(40px,7vw,105px);align-items:start; }
+.bkt-about-intro h2,.bkt-about-section-heading h2 { color:#10294a;font-size:clamp(2.05rem,3.35vw,3.35rem);letter-spacing:-.05em;line-height:1.13;text-wrap:balance;margin:18px 0 24px; }
+.bkt-about-intro p { color:#526a80;max-width:570px;font-size:1.01rem;line-height:1.81;margin:0 0 18px; }
+.bkt-about-intro .bkt-about-intro-lead { color:#24415f;font-weight:580;font-size:1.13rem; }
+.bkt-about-intro-line { display:flex;gap:9px;margin-top:35px;align-items:center; }
+.bkt-about-intro-line span { display:block;height:4px;width:52px;background:#30b665;border-radius:4px; }
+.bkt-about-intro-line span:nth-child(2) { background:#2aaaf5;width:75px; }
+.bkt-about-intro-line span:nth-child(3) { background:#ffd84d;width:35px; }
+.bkt-about-principles-label { color:#2e668e;letter-spacing:.15em;text-transform:uppercase;font-size:.68rem;font-weight:830;margin:7px 0 17px; }
+.bkt-about-principles-panel { border:1px solid #dce8f1;border-radius:14px;overflow:hidden;box-shadow:0 13px 47px #102d4a0b;background:#fbfdff; }
+.bkt-about-principle { display:grid;grid-template-columns:45px 1fr;gap:18px;padding:27px 28px; }
+.bkt-about-principle+.bkt-about-principle { border-top:1px solid #e3ebf2; }
+.bkt-about-principle-num { color:#178ac6;letter-spacing:.12em;font-weight:850;font-size:.73rem;margin-top:4px; }
+.bkt-about-principle h3 { font-size:1.26rem;letter-spacing:-.025em;color:#10294a;margin:0 0 8px; }
+.bkt-about-principle p { margin:0;color:#5e7287;line-height:1.7;font-size:.92rem; }
+.bkt-about-method { background:#f3f7fa;border-block:1px solid #e0eaf0; }
+.bkt-about-section-heading { max-width:750px;margin-bottom:38px; }
+.bkt-about-section-heading p { font-size:1.06rem;line-height:1.74;color:#5d7081;margin:0; }
+.bkt-about-method-grid { counter-reset:step;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:0;margin:0;list-style:none; }
+.bkt-about-method-step { background:#fff;border:1px solid #e0e9f1;border-radius:12px;padding:26px 22px;transition:transform .26s ease,box-shadow .26s ease; }
+.bkt-about-method-step:hover { transform:translateY(-4px);box-shadow:0 15px 36px #15385416; }
+.bkt-about-step-number { display:block;color:#1278b9;font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-bottom:32px; }
+.bkt-about-method-step h3 { font-size:1.24rem;color:#10294a;margin:0 0 10px;letter-spacing:-.02em; }
+.bkt-about-method-step p { margin:0;color:#5b7086;line-height:1.68;font-size:.92rem; }
+.bkt-about-disclaimer { color:#728399;font-size:.76rem;margin:24px 0 0;line-height:1.6;max-width:760px; }
+.bkt-about-projects { background:linear-gradient(180deg,#fff,#f6f9fb); }
+.bkt-about-project-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px; }
+.bkt-about-project { min-width:0;display:flex;flex-direction:column;background:#fff;border:1px solid #d9e5ee;border-radius:15px;padding:30px;box-shadow:0 12px 36px #112d4910;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease; }
+.bkt-about-project:hover { transform:translateY(-4px);box-shadow:0 19px 48px #112d4921; }
+.bkt-about-project::before { content:"";position:absolute;right:-100px;top:-110px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#e1f1fb,transparent 65%);pointer-events:none; }
+.bkt-about-project--vucs::before { background:radial-gradient(circle,#d9f5f3,transparent 65%); }
+.bkt-about-project-heading { display:flex;align-items:start;justify-content:space-between;gap:13px;flex-wrap:wrap;z-index:1;position:relative; }
+.bkt-about-project-index { color:#4288ac;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800; }
+.bkt-about-project-status { color:#366749;background:#f0f9f0;border:1px solid #cce8d1;border-radius:30px;padding:7px 10px;font-size:.73rem;font-weight:750;line-height:1.3; }
+.bkt-about-project--matmatic .bkt-about-project-status { color:#715e16;background:#fff9e5;border-color:#ece3b4; }
+.bkt-about-project-media { margin:24px 0 24px;position:relative;overflow:hidden;border:1px solid #e1e9ef;border-radius:12px;background:#f2f6f9; }
+.bkt-about-project-media img { display:block;width:100%;height:auto;aspect-ratio:4 / 3;object-fit:cover; }
+.bkt-about-project-media figcaption { position:absolute;right:10px;bottom:10px;color:#fff;background:#0a223cde;border-radius:4px;padding:6px 9px;font-size:.7rem;line-height:1.35;font-weight:700;max-width:calc(100% - 20px); }
+.bkt-about-project h3 { color:#10294a;font-size:clamp(1.9rem,2.65vw,2.45rem);letter-spacing:-.05em;margin:0 0 8px; }
+.bkt-about-project-subtitle { color:#214768;font-weight:750;font-size:1rem;margin:0 0 13px; }
+.bkt-about-project-detail { color:#526a80;margin:0 0 29px;line-height:1.68;font-size:.95rem;max-width:500px; }
+.bkt-about-project-link { display:flex;align-items:center;justify-content:space-between;gap:14px;color:#096ba8;font-size:.89rem;font-weight:800;text-decoration:none;border-top:1px solid #e6edf3;padding-top:17px;margin-top:auto; }
+.bkt-about-project-link span { font-size:1.3rem;transition:transform .22s ease; }
+.bkt-about-project-link:hover span { transform:translate(3px,-3px); }
+.bkt-about-partner { position:relative;overflow:hidden;padding-block:clamp(66px,6vw,95px);background:linear-gradient(110deg,#081f39,#133b5f); }
+.bkt-about-partner::after { content:"";position:absolute;pointer-events:none;width:450px;height:450px;border:1px solid #60bde933;border-radius:50%;right:-100px;bottom:-260px;box-shadow:0 0 0 70px #ffffff05,0 0 0 150px #ffffff05; }
+.bkt-about-partner-grid { display:grid;grid-template-columns:minmax(0,1.5fr) minmax(220px,.5fr);gap:55px;align-items:center;position:relative;z-index:1; }
+.bkt-about-partner h2 { color:#fff;line-height:1.15;font-size:clamp(2rem,3.15vw,3rem);letter-spacing:-.047em;max-width:660px;margin:16px 0 22px; }
+.bkt-about-partner p { margin:0;color:#c6d9e7;line-height:1.75;max-width:660px; }
+.bkt-about-partner-actions { display:flex;align-items:stretch;flex-direction:column;gap:15px; }
+.bkt-about-partner .button { text-align:center; }
+.bkt-about-contact-link { color:#e1f2fc;font-weight:750;text-align:center;text-underline-offset:6px;padding:12px; }
+@keyframes bkt-about-rise { from { opacity:0;transform:translateY(18px); } to { opacity:1;transform:translateY(0); } }
+@media(max-width:1000px) { .bkt-about-method-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .bkt-about-hero-grid { gap:35px; } }
+@media(max-width:800px) { .bkt-about-hero-grid,.bkt-about-identity-grid,.bkt-about-partner-grid { grid-template-columns:1fr; } .bkt-about-hero-grid { padding-block:72px; } .bkt-about-hero-visual { min-height:350px; } .bkt-about-identity-grid { gap:37px; }.bkt-about-project-grid { grid-template-columns:1fr; }.bkt-about-partner-actions { max-width:350px; } }
+@media(max-width:520px) { .bkt-about-hero h1 { font-size:clamp(2.25rem,10vw,3.15rem); } .bkt-about-hero-grid { padding-block:59px 70px; } .bkt-about-hero-visual { min-height:300px;padding:25px; } .bkt-about-symbols { padding-block:16px 12px; } .bkt-about-visual-title { font-size:1.65rem; } .bkt-about-hero-actions { flex-direction:column;align-items:stretch; } .bkt-about-principle { padding:22px 18px;grid-template-columns:30px 1fr;gap:11px; } .bkt-about-method-grid { grid-template-columns:1fr; }.bkt-about-method-step { padding:21px; }.bkt-about-step-number { margin-bottom:20px; }.bkt-about-project { padding:22px; }.bkt-about-project-media { margin-top:20px; } }
+@media(prefers-reduced-motion:reduce) { .bkt-about-hero-copy,.bkt-about-hero-visual { animation:none; } .bkt-about-method-step,.bkt-about-project,.bkt-about-project-link span { transition:none; }.bkt-about-method-step:hover,.bkt-about-project:hover,.bkt-about-project-link:hover span { transform:none; } }

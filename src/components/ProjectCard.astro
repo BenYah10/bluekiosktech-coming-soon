@@ -1,0 +1,47 @@
+---
+/**
+ * BlueKioskTech — carte projet premium (correctif CSS 1.3.1).
+ * Rôle : présentation équilibrée des deux concepts sur l'accueil et /solutions.
+ * Architecture : contenus traduits dans src/i18n/ui.ts ; aucune donnée commerciale simulée.
+ * Visuels : concepts MatMatic et VUCS approuvés ; ne constituent pas des photos d’installations réelles.
+ * CSS : feuille dédiée importée explicitement pour assurer le style sur toutes les pages.
+ */
+import '../styles/project-cards.css';
+import { Image } from 'astro:assets';
+import matmaticCardImage from '../assets/projects/matmatic-prototype-lime.webp';
+import vucsCardImage from '../assets/projects/04-vucs-gym-card.webp';
+import { pathFor, translation, type Locale } from '../i18n/ui';
+interface Props { locale: Locale; project: 'matmatic' | 'vucs'; }
+const { locale, project } = Astro.props;
+const t = translation(locale).project[project];
+---
+<article class:list={['bkt-project-card', `bkt-project-card--${project}`]}>
+  <div class="bkt-card-media" aria-hidden="true">
+    <div class="bkt-media-grid"></div>
+    <div class="bkt-media-glow"></div>
+    <!-- Phase 2 : visuels des prototypes sélectionnés (sans nouveau produit générique). -->
+    {project === 'matmatic' ? (
+      <Image class="bkt-card-product-photo" src={matmaticCardImage}
+             widths={[360, 640, 960]} sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 1200px) 44vw, 510px"
+             loading="lazy" decoding="async" alt="" />
+    ) : (
+      <Image class="bkt-card-product-photo" src={vucsCardImage}
+             widths={[360, 640, 960]} sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 1200px) 44vw, 510px"
+             loading="lazy" decoding="async" alt="" />
+    )}
+    <span class="bkt-concept-note">{t.visualNote}</span>
+  </div>
+
+  <div class="bkt-card-body">
+    <div class="bkt-card-overline">
+      <span class="bkt-card-category">{t.category}</span>
+      <span class="bkt-card-status"><span class="bkt-status-dot" aria-hidden="true"></span>{t.status}</span>
+    </div>
+    <h3>{t.name}</h3>
+    <p class="bkt-card-subtitle">{t.subtitle}</p>
+    <p class="bkt-card-description">{t.description}</p>
+    <a class="bkt-card-cta" href={pathFor(locale, project)} aria-label={t.link}>
+      <span>{t.link}</span><span class="bkt-cta-circle" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</article>

@@ -1,0 +1,173 @@
+---
+/**
+ * BlueKioskTech — Solutions VUCS (Phase 2, lot L2.3).
+ * Rôle : présenter le concept VUCS et le parcours B2B en 6 sections.
+ * Décisions : i18n/vucs.ts pour FR/EN ; CSS préfixé vucs- ; lecteur vidéo conceptuel intégré.
+ * Header/Footer, CTA Partenariats et site VUCS existant sont préservés.
+ * Aucun traitement API, formulaire ou variable d'environnement n'est touché.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { pathFor, type Locale } from '../i18n/ui';
+import { vucsTranslation } from '../i18n/vucs';
+import '../styles/vucs-page.css';
+import '../styles/vucs-video-player.css';
+import { vucsVideoTranslation } from '../i18n/vucs-video';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = vucsTranslation(locale);
+const partnersUrl = pathFor(locale, 'partners');
+const solutionsUrl = pathFor(locale, 'solutions');
+const dedicatedSite = 'https://bluekiosk.tech/';
+const vt = vucsVideoTranslation(locale);
+// Vidéo uniquement si le fichier est présent au moment du build Astro.
+const videoDir = join(process.cwd(), 'public', 'videos', 'vucs');
+const hasConceptVideo = existsSync(join(videoDir, 'vucs-presentation.mp4'));
+const hasCaptionsFR = existsSync(join(videoDir, 'vucs-presentation.fr.vtt'));
+const hasCaptionsEN = existsSync(join(videoDir, 'vucs-presentation.en.vtt'));
+---
+<SiteLayout locale={locale} route="vucs" title={t.metaTitle} description={t.metaDescription}>
+  <!-- 01 — Hero : borne VUCS dans un gym, simulation clairement déclarée. -->
+  <section class="vucs-hero" aria-labelledby="vucs-title">
+    <div class="container vucs-hero-layout">
+      <div class="vucs-hero-copy">
+        <span class="eyebrow vucs-eyebrow">{t.hero.eyebrow}</span>
+        <span class="vucs-status"><span class="vucs-status-dot" aria-hidden="true"></span>{t.conceptBadge}</span>
+        <h1 id="vucs-title">{t.hero.title}</h1>
+        <p class="vucs-hero-subtitle">{t.hero.subtitle}</p>
+        <p class="vucs-hero-detail">{t.hero.detail}</p>
+        <div class="vucs-actions">
+          <a class="button button-dark" href={partnersUrl}>{t.hero.primaryAction}<span aria-hidden="true">↗</span></a>
+          <a class="button button-outline" href="#vucs-discovery">{t.hero.secondaryAction}<span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="vucs-stage"><span aria-hidden="true">◉</span>{t.hero.stage}</p>
+      </div>
+      <figure class="vucs-hero-figure">
+        <img src="/visuals/vucs/01-vucs-gym-hero.webp" alt={t.hero.imageAlt} width="1448" height="1086" fetchpriority="high" decoding="async" />
+        <figcaption><span class="vucs-image-note">{t.imageBadge}</span><span>{t.hero.imageCaption}</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 02 — Concept : prototype isolé sur fond neutre, sans personne ni revendication sanitaire. -->
+  <section class="vucs-section vucs-discovery" id="vucs-discovery" aria-labelledby="vucs-discovery-title">
+    <div class="container vucs-discovery-layout">
+      <figure class="vucs-product-figure">
+        <img src="/visuals/vucs/02-vucs-gym-concept.webp" alt={t.discovery.prototypeAlt} width="1448" height="1086" loading="lazy" decoding="async" />
+        <figcaption>{t.discovery.prototypeCaption}</figcaption>
+      </figure>
+      <div class="vucs-discovery-content">
+        <span class="eyebrow">{t.discovery.eyebrow}</span>
+        <h2 id="vucs-discovery-title">{t.discovery.title}</h2>
+        <p class="vucs-section-lead">{t.discovery.intro}</p>
+        <ul class="vucs-feature-list">
+          {t.discovery.tags.map(item => (
+            <li><span class="vucs-feature-marker" aria-hidden="true">✓</span><div><strong>{item.title}</strong><p>{item.body}</p></div></li>
+          ))}
+        </ul>
+        <a class="vucs-dedicated-link" href={dedicatedSite} target="_blank" rel="noopener noreferrer">{t.discovery.websiteLink} <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — Parcours proposé. Aucune capacité technique ou résultat prouvé sous-entendu. -->
+  <section class="vucs-section vucs-steps" id="vucs-steps" aria-labelledby="vucs-steps-title">
+    <div class="container">
+      <div class="vucs-section-heading vucs-center">
+        <span class="eyebrow">{t.steps.eyebrow}</span>
+        <h2 id="vucs-steps-title">{t.steps.title}</h2>
+        <p class="vucs-section-lead">{t.steps.intro}</p>
+      </div>
+      <ol class="vucs-step-grid">
+        {t.steps.items.map(item => (
+          <li class="vucs-step-card"><span class="vucs-step-num">{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></li>
+        ))}
+      </ol>
+      <p class="vucs-steps-note">{t.steps.note}</p>
+    </div>
+  </section>
+
+  <!-- 04 — Bénéfices potentiels, exclusivement conditionnels. -->
+  <section class="vucs-section vucs-benefits" id="vucs-benefits" aria-labelledby="vucs-benefits-title">
+    <div class="container">
+      <div class="vucs-section-heading">
+        <span class="eyebrow">{t.benefits.eyebrow}</span>
+        <h2 id="vucs-benefits-title">{t.benefits.title}</h2>
+        <p class="vucs-section-lead">{t.benefits.intro}</p>
+      </div>
+      <div class="vucs-benefits-grid">
+        {t.benefits.items.map(item => (
+          <article class="vucs-benefit-card"><span class="vucs-benefit-index">{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — Film conceptuel VUCS ; aucune démonstration technique certifiée. -->
+  <section class="vucs-section vucs-video" id="vucs-video" aria-labelledby="vucs-video-title">
+    <div class="container vucs-video-layout">
+      <div class="vucs-video-copy">
+        <span class="eyebrow">{t.video.eyebrow}</span>
+        <h2 id="vucs-video-title">{t.video.title}</h2>
+        <p class="vucs-section-lead">{hasConceptVideo ? vt.readyText : t.video.text}</p>
+        <div class="vucs-video-status" role="note">
+          <span aria-hidden="true">{hasConceptVideo ? 'ⓘ' : '◷'}</span>
+          {hasConceptVideo ? vt.simulationNotice : t.video.status}
+        </div>
+      </div>
+      <figure class={hasConceptVideo ? 'vucs-video-figure vucs-video-figure--active' : 'vucs-video-figure'}>
+        {hasConceptVideo ? (
+          <video
+            class="vucs-concept-player"
+            controls
+            controlsList="nodownload"
+            disablePictureInPicture
+            playsinline
+            preload="none"
+            poster="/videos/vucs/vucs-poster.jpg"
+            width="720"
+            height="720"
+            aria-label={vt.playerLabel}
+          >
+            <source src="/videos/vucs/vucs-presentation.mp4" type="video/mp4" />
+            {hasCaptionsFR && <track kind="captions" src="/videos/vucs/vucs-presentation.fr.vtt" srclang="fr" label="Français" default={locale === 'fr'} />}
+            {hasCaptionsEN && <track kind="captions" src="/videos/vucs/vucs-presentation.en.vtt" srclang="en" label="English" default={locale === 'en'} />}
+            {vt.unsupported}
+          </video>
+        ) : (
+          <img src="/visuals/vucs/03-vucs-gym-waterstation.webp" alt={t.video.imageAlt} loading="lazy" decoding="async" width="1448" height="1086" />
+        )}
+        <figcaption>{hasConceptVideo ? vt.videoCaption : t.imageBadge}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 06 — Discussion B2B via le parcours Partenariats existant. -->
+  <section class="vucs-pilot" id="vucs-pilot" aria-labelledby="vucs-pilot-title">
+    <div class="container vucs-pilot-content">
+      <span class="eyebrow eyebrow-light">{t.pilot.eyebrow}</span>
+      <h2 id="vucs-pilot-title">{t.pilot.title}</h2>
+      <p>{t.pilot.text}</p>
+      <div class="vucs-actions">
+        <a class="button button-accent" href={partnersUrl}>{t.pilot.action}<span aria-hidden="true">↗</span></a>
+        <a class="button vucs-button-on-dark" href={solutionsUrl}>{t.pilot.secondaryAction}<span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="vucs-pilot-note">{t.pilot.label}</p>
+    </div>
+  </section>
+  <div class="container vucs-back"><a class="section-link" href={solutionsUrl}>← {t.back}</a></div>
+</SiteLayout>
+
+<!-- Retour au poster sans boucle ; masquage du menu de téléchargement (non DRM). -->
+<script>
+  const vucsVideo = document.querySelector<HTMLVideoElement>('.vucs-concept-player');
+  if (vucsVideo) {
+    vucsVideo.addEventListener('ended', () => {
+      vucsVideo.pause();
+      vucsVideo.load();
+    });
+    vucsVideo.addEventListener('contextmenu', (event) => event.preventDefault());
+  }
+</script>

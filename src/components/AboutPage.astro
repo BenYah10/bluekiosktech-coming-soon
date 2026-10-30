@@ -1,0 +1,152 @@
+---
+/**
+ * BlueKioskTech — page corporative « À propos » (Phase 2, lot L3.2).
+ * Route dédiée FR/EN, indépendante de InfoPage.astro et de l'accueil validé.
+ * Données : i18n/about.ts (page spécifique), i18n/ui.ts (marque et projets).
+ * Sections : hero → identité → méthode → projets → collaboration.
+ * Design : Hero identitaire inchangé ; visuels conceptuels validés pour les projets.
+ * Accessibilité : titres sémantiques, liens explicites, animations réduites sur demande.
+ */
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { pathFor, translation, type Locale } from '../i18n/ui';
+import { aboutTranslation } from '../i18n/about';
+import '../styles/about-page.css';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const content = aboutTranslation(locale);
+const shared = translation(locale);
+const pillars = shared.home.companyAbout.values;
+const projects = [
+  { key: 'matmatic' as const, route: 'matmatic' as const, details: content.initiatives.matmaticDetail, num: '01', image: '/visuals/matmatic/matmatic-prototype-lime.webp', imageAlt: content.initiatives.matmaticImageAlt, width: 1100, height: 825 },
+  { key: 'vucs' as const, route: 'vucs' as const, details: content.initiatives.vucsDetail, num: '02', image: '/visuals/vucs/04-vucs-gym-card.webp', imageAlt: content.initiatives.vucsImageAlt, width: 1448, height: 1086 },
+];
+---
+<SiteLayout locale={locale} route="about" title={content.metadata.title} description={content.metadata.description}>
+  <!-- HERO : portrait de l'entreprise, sans mise en avant d'une machine en particulier. -->
+  <section class="bkt-about-hero" aria-labelledby="bkt-about-page-title">
+    <div class="container bkt-about-hero-grid">
+      <div class="bkt-about-hero-copy">
+        <span class="eyebrow bkt-about-eyebrow">{content.hero.eyebrow}</span>
+        <h1 id="bkt-about-page-title">{content.hero.title}</h1>
+        <p class="bkt-about-lead">{content.hero.intro}</p>
+        <div class="bkt-about-hero-actions">
+          <a class="button button-dark" href="#notre-demarche">{content.hero.primary}<span aria-hidden="true">↘</span></a>
+          <a class="button button-outline" href={pathFor(locale, 'partners')}>{content.hero.secondary}<span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="bkt-about-hero-location"><span aria-hidden="true"></span>{content.hero.note}</p>
+      </div>
+      <div class="bkt-about-hero-visual" aria-hidden="true">
+        <span class="bkt-about-visual-eyebrow">{content.hero.visualEyebrow}</span>
+        <div class="bkt-about-symbols">
+          <svg viewBox="0 0 380 150" focusable="false">
+            <!-- Trois formes officielles : triangle arrondi, rectangle horizontal arrondi et cercle. -->
+            <path d="M60 56.80 Q69 42 78 56.80 L105 101.20 Q114 116 96 116 L42 116 Q24 116 33 101.20 Z" fill="#30B665" />
+            <rect x="140" y="45" width="100" height="70" rx="11" fill="#2AAAF5" />
+            <circle cx="303" cy="80" r="37" fill="#FFD84D" />
+          </svg>
+        </div>
+        <p class="bkt-about-visual-title">{content.hero.visualTitle}</p>
+        <span class="bkt-about-visual-footer">{content.hero.visualFooter}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDENTITÉ : reprise des trois piliers déjà approuvés sur l'accueil. -->
+  <section class="bkt-about-identity section" aria-labelledby="bkt-about-identity-title">
+    <div class="container bkt-about-identity-grid">
+      <div class="bkt-about-intro">
+        <span class="eyebrow">{content.purpose.eyebrow}</span>
+        <h2 id="bkt-about-identity-title">{content.purpose.title}</h2>
+        <p class="bkt-about-intro-lead">{content.purpose.lead}</p>
+        <p>{content.purpose.detail}</p>
+        <div class="bkt-about-intro-line" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+      <div class="bkt-about-principles">
+        <p class="bkt-about-principles-label">{content.purpose.pillarIntro}</p>
+        <div class="bkt-about-principles-panel">
+          {pillars.map((pillar) => (
+            <article class="bkt-about-principle">
+              <span class="bkt-about-principle-num" aria-hidden="true">{pillar.label}</span>
+              <div><h3>{pillar.title}</h3><p>{pillar.body}</p></div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESSUS : quatre étapes, intentions plutôt que résultats déjà obtenus. -->
+  <section id="notre-demarche" class="bkt-about-method section" aria-labelledby="bkt-about-method-title">
+    <div class="container">
+      <header class="bkt-about-section-heading">
+        <span class="eyebrow">{content.method.eyebrow}</span>
+        <h2 id="bkt-about-method-title">{content.method.title}</h2>
+        <p>{content.method.intro}</p>
+      </header>
+      <ol class="bkt-about-method-grid">
+        {content.method.steps.map((step) => (
+          <li class="bkt-about-method-step">
+            <span class="bkt-about-step-number">{step.id}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="bkt-about-disclaimer">{content.method.disclaimer}</p>
+    </div>
+  </section>
+
+  <!-- PROJETS : équilibre des deux initiatives, statuts issus du dictionnaire existant. -->
+  <section class="bkt-about-projects section" aria-labelledby="bkt-about-projects-title">
+    <div class="container">
+      <header class="bkt-about-section-heading">
+        <span class="eyebrow">{content.initiatives.eyebrow}</span>
+        <h2 id="bkt-about-projects-title">{content.initiatives.title}</h2>
+        <p>{content.initiatives.intro}</p>
+      </header>
+      <div class="bkt-about-project-grid">
+        {projects.map((project) => (
+            <article class:list={['bkt-about-project', `bkt-about-project--${project.key}`]}>
+              <div class="bkt-about-project-heading">
+                <span class="bkt-about-project-index">{project.num} / BlueKioskTech</span>
+                <span class="bkt-about-project-status">{shared.project[project.key].status}</span>
+              </div>
+              <!-- Médias des concepts approuvés : aucune photo d'installation réelle. -->
+              <figure class="bkt-about-project-media">
+                <img
+                  src={project.image}
+                  alt={project.imageAlt}
+                  width={project.width}
+                  height={project.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>{shared.project[project.key].visualNote}</figcaption>
+              </figure>
+              <h3>{shared.project[project.key].name}</h3>
+              <p class="bkt-about-project-subtitle">{shared.project[project.key].subtitle}</p>
+              <p class="bkt-about-project-detail">{project.details}</p>
+              <a href={pathFor(locale, project.route)} class="bkt-about-project-link">{content.initiatives.view}<span aria-hidden="true">↗</span></a>
+            </article>
+        ))}
+      </div>
+      <p class="bkt-about-disclaimer">{content.initiatives.note}</p>
+    </div>
+  </section>
+
+  <!-- CTA : action commerciale simple et transparente. -->
+  <section class="bkt-about-partner" aria-labelledby="bkt-about-partner-title">
+    <div class="container bkt-about-partner-grid">
+      <div>
+        <span class="eyebrow eyebrow-light">{content.partner.eyebrow}</span>
+        <h2 id="bkt-about-partner-title">{content.partner.title}</h2>
+        <p>{content.partner.intro}</p>
+      </div>
+      <div class="bkt-about-partner-actions">
+        <a class="button button-accent" href={pathFor(locale, 'partners')}>{content.partner.action}<span aria-hidden="true">↗</span></a>
+        <a class="bkt-about-contact-link" href={pathFor(locale, 'contact')}>{content.partner.alternate}<span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
