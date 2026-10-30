@@ -110,7 +110,16 @@ async function emailjs(templateId, templateParams) {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   }, 6500);
-  return response.ok;
+if (!response.ok) {
+  console.error('[BlueKioskTech][EmailJS] Envoi refuse', {
+    status: response.status,
+    template: templateId === process.env.EMAILJS_CONTACT_TEMPLATE_ID
+      ? 'notification_interne'
+      : 'accuse_reception'
+  });
+}
+
+return response.ok;
 }
 function validate(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return null;
