@@ -103,6 +103,7 @@ async function fetchTimed(url, options, timeoutMs) {
   finally { clearTimeout(timeout); }
 }
 
+
 async function emailjs(templateId, templateParams) {
   const data = {
     service_id: process.env.EMAILJS_SERVICE_ID,
@@ -111,44 +112,19 @@ async function emailjs(templateId, templateParams) {
     template_params: templateParams,
   };
 
-  // Ne jamais ajouter cette clé dans src/ ou dans une variable PUBLIC_*.
+  // La clé privée reste exclusivement côté serveur.
   data.accessToken = process.env.EMAILJS_PRIVATE_KEY;
 
   const response = await fetchTimed(EMAILJS_ENDPOINT, {
-    // Requête serveur-vers-serveur : ne pas fabriquer un en-tête Origin.
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   }, 6500);
 
+  // Journal opérationnel minimal, sans secrets ni données personnelles.
   if (!response.ok) {
-    // Diagnostic prudent : seule une catégorie prédéfinie est journalisée.
-    // Ne jamais journaliser la réponse brute, les clés ou les données du formulaire.
-    let category = 'unknown';
-
-    try {
-      const errorText = (await response.text()).slice(0, 2000).toLowerCase();
-
-      if (/service.*(invalid|not found|does not exist)/.test(errorText)) {
-        category = 'invalid_service';
-      } else if (/template.*(invalid|not found|does not exist)/.test(errorText)) {
-        category = 'invalid_template';
-      } else if (/user_id|public key|private key|access.?token|invalid.*key/.test(errorText)) {
-        category = 'credentials';
-      } else if (/origin|domain|referer|referrer/.test(errorText)) {
-        category = 'domain_restriction';
-      } else if (/limit|quota|too many/.test(errorText)) {
-        category = 'rate_or_quota';
-      } else if (/recipient|email address|to_email/.test(errorText)) {
-        category = 'recipient_configuration';
-      }
-    } catch {
-      category = 'unreadable_response';
-    }
-
-    console.error('[BlueKioskTech][EmailJS] Envoi refuse', {
+    console.error('[BlueKioskTech][EmailJS] Delivery failed', {
       status: response.status,
-      category,
       template: templateId === process.env.EMAILJS_CONTACT_TEMPLATE_ID
         ? 'notification_interne'
         : 'accuse_reception',
@@ -157,6 +133,7 @@ async function emailjs(templateId, templateParams) {
 
   return response.ok;
 }
+
 
 function validate(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return null;
