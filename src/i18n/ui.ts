@@ -39,10 +39,12 @@ export const ui = {
       mobile: 'Ouvrir le menu', close: 'Fermer le menu',
       language: 'Choisir la langue', navigationLabel: 'Navigation principale', mobileNavigation: 'Navigation mobile',
     },
+    
     metadata: {
-      title: 'BlueKioskTech | Innovation, hygiène et propreté en libre-service',
-      description: 'Découvrez BlueKioskTech, une startup québécoise qui développe des solutions automatisées en libre-service pour l’hygiène et le nettoyage.',
+    title: 'BlueKioskTech | Innovation en hygiène et propreté automatisées',
+    description: 'BlueKioskTech développe des concepts automatisés en libre-service pour l’hygiène et la propreté. Découvrez ses projets MatMatic et VUCS.',
     },
+
     home: {
       eyebrow: 'Innovation · Hygiène · Propreté',
       headline: 'Des solutions intelligentes pour un quotidien plus propre.',
@@ -165,10 +167,12 @@ export const ui = {
       mobile: 'Open menu', close: 'Close menu',
       language: 'Choose language', navigationLabel: 'Main navigation', mobileNavigation: 'Mobile navigation',
     },
+    
     metadata: {
-      title: 'BlueKioskTech | Self-service innovation for hygiene and cleaning',
-      description: 'Discover BlueKioskTech, a Québec startup developing automated self-service solutions for hygiene and cleaning.',
+     title: 'BlueKioskTech | Automated Hygiene & Cleaning Innovation',
+     description: 'BlueKioskTech develops automated self-service concepts for everyday hygiene and cleaning. Discover its MatMatic and VUCS projects.',
     },
+
     home: {
       eyebrow: 'Innovation · Hygiene · Cleaning',
       headline: 'Smarter solutions for a cleaner everyday life.',

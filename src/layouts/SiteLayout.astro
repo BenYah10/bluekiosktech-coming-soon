@@ -77,9 +77,10 @@ const organization = {
   '@id': `${siteRoot}#organization`,
   name: 'BlueKioskTech',
   url: siteRoot,
-  logo: new URL('/brand/bluekiosktech-wordmark.svg', Astro.site).toString(),
-  description: 'Développement de concepts de services automatisés en libre-service pour l’hygiène et le nettoyage.',
+  logo: new URL('/brand/bluekiosktech-favicon.png', Astro.site).toString(),
+  description: 'Marque québécoise dédiée au développement de solutions automatisées en libre-service pour l’hygiène et la propreté du quotidien.',
 };
+
 const website = {
   '@type': 'WebSite',
   '@id': `${siteRoot}#website`,
@@ -118,8 +119,13 @@ const jsonLdString = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     <link rel="alternate" hreflang="en-CA" href={alternativeEn} />
     <link rel="alternate" hreflang="x-default" href={alternativeFr} />
     <!-- Favicon de marque, avec solution de repli pour les navigateurs anciens. -->
-    <link rel="icon" type="image/png" href="/brand/bluekiosktech-favicon.png?v=rounded-1" />
-    <link rel="icon" type="image/svg+xml" sizes="any" href="/brand/bluekiosktech-symbol.svg?v=rounded-1" />
+    <link rel="icon" type="image/png" sizes="256x256"
+    href="/brand/bluekiosktech-favicon.png?v=bkt-2" />
+    <!-- BlueKioskTech — Favicons officiels -->
+    <link rel="icon" type="image/svg+xml" sizes="any"
+    href="/brand/bluekiosktech-symbol.svg?v=bkt-2" />
+    <link rel="shortcut icon"
+    href="/favicon.ico?v=bkt-2" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BlueKioskTech" />
     <meta property="og:title" content={pageTitle} />
