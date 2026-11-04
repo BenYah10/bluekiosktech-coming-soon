@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="symbol-title">
-  <title id="symbol-title">BlueKioskTech — symbole</title>
-  <!-- Icône harmonisée : 3 formes de hauteur comparable ; rectangle plus large que haut. -->
-  <path d="M19.40 56.40 Q23 50 26.60 56.40 L37.40 75.60 Q41 82 33.80 82 L12.20 82 Q5 82 8.60 75.60 Z" fill="#30B665"/>
-  <rect x="47" y="53" width="37" height="28" rx="5" fill="#2AAAF5"/>
-  <circle cx="105" cy="67" r="16" fill="#FFD84D"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">BlueKioskTech — symbole</title>
+  <desc id="desc">Triangle vert arrondi, rectangle bleu arrondi et cercle jaune de même hauteur, légèrement superposés.</desc>
+  <!-- Trois formes de hauteur identique (96), alignées et superposées de gauche à droite. -->
+  <path d="M53 80 C58 80 62 83 65 88 L106 158 C111 166 105 176 96 176 H14 C5 176 -1 166 4 158 L45 88 C48 83 50 80 53 80 Z" fill="#30B665"/>
+  <rect x="79" y="80" width="99" height="96" rx="17" fill="#2AAAF5"/>
+  <circle cx="197" cy="128" r="48" fill="#FFD84D"/>
 </svg>
