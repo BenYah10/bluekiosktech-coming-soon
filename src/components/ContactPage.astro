@@ -100,7 +100,18 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || ''
             <textarea name="message" rows="5" minlength="10" maxlength="2000" required placeholder={t.form.messagePlaceholder}></textarea>
           </label>
           <label class="bkt-contact-consent"><input name="consent" type="checkbox" required /><span>{t.form.privacy}</span></label>
-          <p class="bkt-contact-privacy">{t.form.privacyNote}</p>
+
+          <p class="bkt-contact-privacy">
+           {t.form.privacyNote}{' '}
+           <a
+            href={pathFor(locale, 'privacy')}
+            target="_blank"
+            rel="noopener noreferrer"
+           >
+            {t.form.privacyLinkLabel}
+           </a>.
+          </p>
+
           <div class="bkt-contact-honeypot" aria-hidden="true"><label>{t.form.leaveBlank}<input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="startedAt" value="" />

@@ -61,6 +61,11 @@ const socialImages: Record<RouteId, { file: string; fr: string; en: string }> = 
     fr: 'BlueKioskTech développe les concepts MatMatic et VUCS.',
     en: 'BlueKioskTech is developing MatMatic and VUCS.',
   },
+    privacy: {
+    file: '/seo/bluekiosktech-matmatic-vucs.jpg',
+    fr: 'Politique de confidentialité du site corporatif BlueKioskTech.',
+    en: 'Privacy Policy for the BlueKioskTech corporate website.',
+  },
 };
 const social = socialImages[route];
 const socialUrl = new URL(social.file, Astro.site).toString();

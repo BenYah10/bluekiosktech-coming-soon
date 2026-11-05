@@ -4,7 +4,15 @@
  * Les chemins français/anglais peuvent différer tout en ciblant la même page.
  */
 export type Locale = 'fr' | 'en';
-export type RouteId = 'home' | 'solutions' | 'matmatic' | 'vucs' | 'about' | 'partners' | 'contact';
+export type RouteId =
+  | 'home'
+  | 'solutions'
+  | 'matmatic'
+  | 'vucs'
+  | 'about'
+  | 'partners'
+  | 'contact'
+  | 'privacy';
 
 const paths: Record<Locale, Record<RouteId, string>> = {
   fr: {
@@ -15,6 +23,7 @@ const paths: Record<Locale, Record<RouteId, string>> = {
     about: '/a-propos/',
     partners: '/partenariats/',
     contact: '/contact/',
+    privacy: '/politique-de-confidentialite/',
   },
   en: {
     home: '/en/',
@@ -24,6 +33,7 @@ const paths: Record<Locale, Record<RouteId, string>> = {
     about: '/en/about/',
     partners: '/en/partnerships/',
     contact: '/en/contact/',
+    privacy: '/en/privacy-policy/',
   },
 };
 
@@ -149,6 +159,11 @@ export const ui = {
       about: { label: 'Notre entreprise', title: 'L’innovation au service de l’hygiène et de la propreté', intro: 'BlueKioskTech est une startup québécoise qui développe des concepts de services automatisés en libre-service. Notre mission est de rendre l’hygiène et le nettoyage du quotidien plus accessibles.' },
       partners: { label: 'Partenariats', title: 'Développons des collaborations de proximité', intro: 'Nous recherchons des échanges avec des exploitants et établissements souhaitant étudier la participation à des projets pilotes. Les conditions restent à définir ensemble.' },
       contact: { label: 'Contact', title: 'Parlons de votre projet', intro: 'Pour un renseignement ou une proposition de partenariat, communiquez avec BlueKioskTech par courriel.' },
+      privacy: {
+      label: 'Politique de confidentialité',
+      title: 'Politique de confidentialité',
+      intro: 'Découvrez comment BlueKioskTech recueille, utilise, conserve et protège vos renseignements personnels.',
+},
     },
     general: {
       contactUs: 'Nous contacter', website: 'Visiter le site dédié à VUCS',
@@ -158,6 +173,7 @@ export const ui = {
       email: 'info@bluekiosk.tech',
       footerLine: 'Solutions automatisées en libre-service · Montréal, Québec',
       rights: 'Tous droits réservés.',
+      privacyPolicy: 'Politique de confidentialité',
     },
   },
   en: {
@@ -277,6 +293,7 @@ export const ui = {
       about: { label: 'Our company', title: 'Innovation for hygiene and cleanliness', intro: 'BlueKioskTech is a Québec startup developing automated self-service concepts. Our mission is to make everyday hygiene and cleaning more accessible.' },
       partners: { label: 'Partnerships', title: 'Building local collaborations', intro: 'We welcome discussions with operators and facilities interested in exploring pilot projects. Partnership terms will be defined jointly.' },
       contact: { label: 'Contact', title: 'Let’s talk about your project', intro: 'For inquiries or partnership opportunities, contact BlueKioskTech by email.' },
+      privacy: { label: 'Privacy Policy', title: 'Privacy Policy', intro: 'Please read our privacy policy to learn how we collect, use, and protect your personal information.' },
     },
     general: {
       contactUs: 'Contact us', website: 'Visit the VUCS website',
@@ -286,6 +303,7 @@ export const ui = {
       email: 'info@bluekiosk.tech',
       footerLine: 'Automated self-service solutions · Montréal, Québec',
       rights: 'All rights reserved.',
+      privacyPolicy: 'Privacy Policy',
     },
   },
 } as const;
