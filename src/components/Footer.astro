@@ -23,11 +23,28 @@ const labels = [t.nav.home, t.nav.solutions, t.nav.about, t.nav.partners, t.nav.
       {links.map((id, i) => <a href={pathFor(locale, id)}>{labels[i]}</a>)}
     </nav>
   </div>
-  <div class="container footer-bottom">
-    <span>© {new Date().getFullYear()} BlueKioskTech. {t.general.rights}</span>
-    <small class="footer-concept-note"><span class="footer-concept-dot" aria-hidden="true"></span>{t.general.conceptNote}</small>
+
+<div class="container footer-bottom">
+  <div class="footer-legal">
+    <span>
+      © {new Date().getFullYear()} BlueKioskTech. {t.general.rights}
+    </span>
+
+    <a
+      class="footer-privacy-link"
+      href={pathFor(locale, 'privacy')}
+    >
+      {t.general.privacyPolicy}
+    </a>
   </div>
+
+  <small class="footer-concept-note">
+    <span class="footer-concept-dot" aria-hidden="true"></span>
+    {t.general.conceptNote}
+  </small>
+</div>
 </footer>
+
 <style>
   /* Le CSS du footer est isolé du header et des pages Solutions. */
   .site-footer { background:#fff;border-top:1px solid #e2eaf1;color:#546780;padding-top:34px; }
@@ -40,8 +57,35 @@ const labels = [t.nav.home, t.nav.solutions, t.nav.about, t.nav.partners, t.nav.
   .footer-nav a:hover { color:#0667ac; }
   .footer-nav a:focus-visible,.footer-logo:focus-visible { outline:2px solid #1476b8;outline-offset:4px;border-radius:3px; }
   .footer-bottom { display:flex;justify-content:space-between;gap:12px 24px;align-items:center;flex-wrap:wrap;border-top:1px solid #e7edf3;padding-block:17px 22px;font-size:.77rem;line-height:1.5; }
+
   .footer-concept-note { display:inline-flex;align-items:center;gap:8px;color:#617990;font-size:.75rem; }
-  .footer-concept-dot { display:inline-block;width:7px;height:7px;background:#2bb667;border-radius:100%;flex:none; }
+  .
+/* Liens légaux du pied de page — FR/EN. */
+.footer-legal {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.footer-privacy-link {
+  color: #24577e;
+  font-size: .77rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-privacy-link:hover {
+  color: #0667ac;
+}
+
+.footer-privacy-link:focus-visible {
+  outline: 2px solid #1476b8;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+-concept-dot { display:inline-block;width:7px;height:7px;background:#2bb667;border-radius:100%;flex:none; }
   @media(max-width:800px) {
     .footer-main { flex-direction:column;gap:18px; }
     .footer-nav { justify-content:flex-start;gap:10px 19px; }

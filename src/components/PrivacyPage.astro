@@ -1,0 +1,312 @@
+
+---
+/**
+ * BlueKioskTech.ca — PrivacyPage.astro
+ *
+ * Rôle :
+ * - Afficher la politique de confidentialité FR/EN.
+ * - Réutiliser les données centralisées dans i18n/privacy.ts.
+ * - Fournir une navigation accessible entre les sections.
+ *
+ * Aucun traitement de formulaire ou de données personnelles.
+ */
+
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { privacyTranslation } from '../i18n/privacy';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const policy = privacyTranslation(locale);
+
+const metaDescription =
+  locale === 'fr'
+    ? 'Consultez la politique de confidentialité de BlueKioskTech : renseignements recueillis, protection, conservation et droits des personnes.'
+    : 'Read the BlueKioskTech Privacy Policy covering personal information, protection, retention and privacy rights.';
+
+const tocLabel =
+  locale === 'fr' ? 'Sommaire de la politique' : 'Policy contents';
+---
+
+<SiteLayout
+  locale={locale}
+  route="privacy"
+  title={policy.title}
+  description={metaDescription}
+>
+  <section class="bkt-privacy-hero">
+    <div class="container">
+      <span class="bkt-privacy-eyebrow">
+        BLUEKIOSKTECH · {locale === 'fr' ? 'CONFIDENTIALITÉ' : 'PRIVACY'}
+      </span>
+
+      <h1>{policy.title}</h1>
+
+      <p class="bkt-privacy-intro">
+        {locale === 'fr'
+          ? 'Découvrez comment nous recueillons, utilisons, conservons et protégeons vos renseignements personnels.'
+          : 'Learn how we collect, use, retain, and protect your personal information.'}
+      </p>
+
+      <div class="bkt-privacy-meta">
+        <span>{policy.version}</span>
+        <span>
+          {locale === 'fr' ? 'Projet du' : 'Draft dated'} {policy.draftDate}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bkt-privacy-main section">
+    <div class="container bkt-privacy-layout">
+
+      <nav class="bkt-privacy-toc" aria-label={tocLabel}>
+        <h2>{tocLabel}</h2>
+
+        <ol>
+          {policy.sections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>
+                {section.title.replace(/^\d+\.\s*/, '')}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <article class="bkt-privacy-content" aria-label={policy.title}>
+        <p class="bkt-privacy-effective">
+          <strong>
+            {locale === 'fr' ? 'Entrée en vigueur :' : 'Effective date:'}
+          </strong>
+          {' '}{policy.effectiveDate}
+        </p>
+
+        {policy.sections.map((section) => (
+          <section id={section.id} class="bkt-privacy-section">
+            <h2>{section.title}</h2>
+
+            {section.blocks.map((block) => (
+              block.type === 'paragraph' ? (
+                <p>{block.text}</p>
+              ) : block.type === 'subheading' ? (
+                <h3>{block.text}</h3>
+              ) : block.type === 'list' ? (
+                <ul>
+                  {block.items?.map((item) => <li>{item}</li>)}
+                </ul>
+              ) : null
+            ))}
+          </section>
+        ))}
+
+        <div class="bkt-privacy-contact">
+          <h2>
+            {locale === 'fr'
+              ? 'Une question concernant vos renseignements ?'
+              : 'Questions about your personal information?'}
+          </h2>
+
+          <p>
+            {locale === 'fr'
+              ? 'Communiquez avec notre responsable de la protection des renseignements personnels.'
+              : 'Contact our person responsible for the protection of personal information.'}
+          </p>
+
+          <a href="mailto:info@bluekiosk.tech">
+            info@bluekiosk.tech
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .bkt-privacy-hero {
+    background: linear-gradient(135deg, #0c2545, #16456b);
+    color: #fff;
+    padding: clamp(58px, 8vw, 100px) 0;
+  }
+
+  .bkt-privacy-eyebrow {
+    display: block;
+    color: #9edbc0;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+    margin-bottom: 20px;
+  }
+
+  .bkt-privacy-hero h1 {
+    color: #fff;
+    font-size: clamp(2rem, 5vw, 3.7rem);
+    line-height: 1.12;
+    max-width: 850px;
+    margin: 0 0 22px;
+  }
+
+  .bkt-privacy-intro {
+    max-width: 760px;
+    color: #d7e5f1;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .bkt-privacy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+    font-size: .82rem;
+    color: #d7e5f1;
+  }
+
+  .bkt-privacy-meta span {
+    padding: 7px 12px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+  }
+
+  .bkt-privacy-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 285px) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .bkt-privacy-toc {
+    position: sticky;
+    top: 25px;
+    background: #f4f8fb;
+    border: 1px solid #e0eaf2;
+    border-radius: 14px;
+    padding: 24px;
+  }
+
+  .bkt-privacy-toc h2 {
+    font-size: 1.05rem;
+    color: #132c50;
+    margin: 0 0 18px;
+  }
+
+  .bkt-privacy-toc ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+
+  .bkt-privacy-toc li {
+    margin-bottom: 12px;
+    font-size: .84rem;
+    line-height: 1.5;
+  }
+
+  .bkt-privacy-toc a {
+    color: #37536e;
+    text-decoration: none;
+  }
+
+  .bkt-privacy-toc a:hover {
+    color: #0667ac;
+    text-decoration: underline;
+  }
+
+  .bkt-privacy-content {
+    min-width: 0;
+    color: #33485d;
+    line-height: 1.8;
+  }
+
+  .bkt-privacy-effective {
+    background: #f4f8fb;
+    border-left: 4px solid #2bb667;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin-bottom: 36px;
+  }
+
+  .bkt-privacy-section {
+    margin-bottom: 42px;
+    scroll-margin-top: 28px;
+  }
+
+  .bkt-privacy-section h2 {
+    color: #132c50;
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.3;
+    margin: 0 0 18px;
+  }
+
+  .bkt-privacy-section h3 {
+    color: #183c60;
+    font-size: 1.08rem;
+    margin: 26px 0 12px;
+  }
+
+  .bkt-privacy-section p {
+    margin: 0 0 16px;
+  }
+
+  .bkt-privacy-section ul {
+    padding-left: 24px;
+    margin: 0 0 20px;
+  }
+
+  .bkt-privacy-section li {
+    margin-bottom: 8px;
+  }
+
+  .bkt-privacy-contact {
+    background: #edf8f2;
+    border: 1px solid #b8dfc9;
+    padding: clamp(20px, 4vw, 32px);
+    border-radius: 14px;
+    margin-top: 45px;
+  }
+
+  .bkt-privacy-contact h2 {
+    color: #132c50;
+    font-size: 1.3rem;
+    margin: 0 0 12px;
+  }
+
+  .bkt-privacy-contact a {
+    color: #075e40;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .bkt-privacy-toc a:focus-visible,
+  .bkt-privacy-contact a:focus-visible {
+    outline: 2px solid #1476b8;
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .bkt-privacy-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .bkt-privacy-toc {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .bkt-privacy-hero {
+      padding: 48px 0;
+    }
+
+    .bkt-privacy-toc {
+      padding: 20px;
+    }
+
+    .bkt-privacy-section {
+      margin-bottom: 34px;
+    }
+  }
+</style>

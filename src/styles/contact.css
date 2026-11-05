@@ -62,3 +62,20 @@
 @media(max-width:880px){.bkt-contact-layout{grid-template-columns:1fr}.bkt-contact-hero-grid{grid-template-columns:1fr}.bkt-contact-hero-aside{max-width:670px}}
 @media(max-width:600px){.bkt-contact-fields{grid-template-columns:1fr}.bkt-contact-hero{padding-block:60px}.bkt-contact-form-card{padding:23px 18px}.bkt-contact-mode{display:grid}.bkt-contact-mode label{width:100%}.bkt-contact-hero h1{font-size:clamp(2.25rem,9vw,3.15rem)}.bkt-contact-main{padding-block:55px}.bkt-contact-submit-row button{width:100%}}
 @media(prefers-reduced-motion:reduce){.bkt-contact-hero *{animation:none!important;transition:none!important}}
+/* Politique de confidentialité — lien visible et accessible FR/EN. */
+.bkt-contact-privacy a {
+  color: #075e9b;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bkt-contact-privacy a:hover {
+  color: #064b7a;
+}
+
+.bkt-contact-privacy a:focus-visible {
+  outline: 2px solid #1476b8;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
