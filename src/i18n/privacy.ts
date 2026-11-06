@@ -37,11 +37,12 @@ export interface PrivacyContent {
 }
 
 export const privacyCopy: Record<Locale, PrivacyContent> = {
-  fr: {
-    title: 'Politique de confidentialité',
-    version: 'V1.0',
-    draftDate: '4 novembre 2026',
-    effectiveDate: 'À confirmer lors de la publication',
+  
+fr: {
+  title: 'Politique de confidentialité',
+  version: 'V1.0',
+  draftDate: '5 novembre 2026',
+  effectiveDate: '5 novembre 2026',
 
 sections: [
   {
@@ -481,10 +482,10 @@ sections: [
   },
 
   en: {
-    title: 'Privacy Policy',
-    version: 'V1.0',
-    draftDate: 'November 4, 2026',
-    effectiveDate: 'To be confirmed upon publication',
+  title: 'Privacy Policy',
+  version: 'V1.0',
+  draftDate: 'November 5, 2026',
+  effectiveDate: 'November 5, 2026',
 
 sections: [
   {
